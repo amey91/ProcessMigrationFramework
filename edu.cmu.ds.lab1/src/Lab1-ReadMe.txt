@@ -1,0 +1,1 @@
+This project uses try-catch-with-resources and thus requires Java SE 7 or above to run.
