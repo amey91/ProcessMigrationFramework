@@ -14,7 +14,7 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 	private boolean migrated; 		/* flag for migration */
 	private transient RandomAccessFile fileStream;
 	
-	public TransactionalFileOutputStream(String fileName) {
+	public TransactionalFileOutputStream(String fileName, boolean migrated) {
 		// TODO Auto-generated constructor stub
 		this.fileName = fileName;
 		counter = 0L;
