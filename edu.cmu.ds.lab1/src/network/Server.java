@@ -169,6 +169,18 @@ class ClientHandler extends Thread{
 		    
 		    while (true) {
 		        String line = inputStream.readLine();
+		        String words[]=line.split("\\s+");
+		        
+		        //check if messagefrom ProcessManager
+		        if(words[0].equals("ProcessManager")){
+		        	switch(Integer.parseInt(words[1])){
+		        	case(StatusMessages.LIST_CLIENTS):
+		        		Server.displayClients();
+		        		break;
+		        	case(StatusMessages.LIST_PROCESSES):break;
+		        	//case(StatusMessages.)
+		        	}
+		        }
 		        if (line.startsWith("/quit")) {
 		          break;
 		        }

@@ -32,11 +32,16 @@ public class Client {
 	        int portNumber = Server.INITIAL_PORT;
 
 	        try {
+	        	
 	        	//try to connect to server
 	            Socket echoSocket = new Socket(hostName, portNumber);
+	            //open print stream
 	            PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
+	            // open in stream
 	            BufferedReader in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+	            // standard input stream
 	            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+	            // store input
 	            String userInput;
 	            while ((userInput = stdIn.readLine()) != null) {
 	                out.println(userInput);
