@@ -9,6 +9,14 @@ public class Location {
 		socketNumber = newSocketNumber;
 	}
 	
+	public String getIP(){
+		return this.ipAddress;
+	}
+	
+	public int getSocketNumber(){
+		return this.socketNumber;
+	}
+	
 	public String toString(){
 		return "Location: IP="+ipAddress+" Socket="+socketNumber;
 	}

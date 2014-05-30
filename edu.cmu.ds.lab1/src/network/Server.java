@@ -1,5 +1,14 @@
 package network;
- 
+
+/**
+ * class derived from the official Java documentation available at:
+ * http://docs.oracle.com/javase/tutorial/networking/sockets/examples/EchoServer.java
+ * I have modified the program by removing the implicit try-with-resources block
+ * and replacing it with a traditional try-catch block and a finally
+ * block to explicitly free all the resources that were being freed implicitly before.
+ */
+
+
 import java.lang.Runnable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +26,9 @@ import java.util.Date;
 public class Server {
 	// default port for initial communication
 	public static int INITIAL_PORT = 2222;
+	//default initial host name
+	public static String HOSTNAME = "localhost";
+	
 	// map each client to its location
 	private HashMap<String, Location> clients;
 	// location consisting of ip and port for each client
@@ -46,21 +58,39 @@ public class Server {
       	*/  
 	        int portNumber = Server.INITIAL_PORT;
 	        while(true){
-			        try (
+			        try {
+			        	// listen at initial connection port
 			            ServerSocket serverSocket = new ServerSocket(Server.INITIAL_PORT);
+			            
+			            //accept a new client connecton by listening to port
 			            Socket clientSocket = serverSocket.accept();     
-			            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);                   
-			            BufferedReader in = new BufferedReader(
-			                new InputStreamReader(clientSocket.getInputStream()));
-			        ) {
+			            
+			            //once client connects, create a output stream at the socket
+			            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+			            
+			            //create a input stream for the new socket
+			            BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			            
+			            
 			            String inputLine;
 			            while ((inputLine = in.readLine()) != null) {
+			            	// TODO use the input line
 			                out.println(inputLine);
 			            }
 			        } catch (IOException e) {
 			            System.out.println("Exception caught when trying to listen on port " + portNumber + " or listening for a connection");
 			            System.out.println(e.getMessage());
 			        }
+			          catch (Exception e) {
+			        	  System.out.println("Exception occured in Server. Trace:");
+			        	System.out.print(e.getStackTrace());
+			          }
+			        finally {
+			        	 
+			        	 
+			        	 
+			        }
+			        
 	        }
 	        
 	} // end of main()
