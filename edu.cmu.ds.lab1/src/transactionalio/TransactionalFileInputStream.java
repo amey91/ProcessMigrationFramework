@@ -1,11 +1,11 @@
 package transactionalio;
 
 /**
- * When a read is requested from the class, it:
- * 1. open the file
- * 2. seek the required position
- * 3. perform the operation
- * 4. close the file.
+ * When read is called from the class, it:
+ * 1. Opens the file
+ * 2. Set the file pointer to the desired position where the next read is going to happen
+ * 3. Perform the operation
+ * 4. Close the file.
  * 
  * To cache file handler, only close it when migrated.
  * 
@@ -21,37 +21,33 @@ public class TransactionalFileInputStream extends InputStream implements  Serial
 	
 	private String fileName;
 	private static final long serialVersionUID = 1717622015524884281L;
-	private long counter;
-	/* cache the connection */
-	private boolean migrated; /* flag for migration */
-	private transient RandomAccessFile fileStream;
+	private long counter;	/* cache the connection */
+	private boolean migrated;	/* flag for migration */
+	private transient RandomAccessFile fileStream;	/* make fileStrem not serializable */
 	
 	public TransactionalFileInputStream(String fileName) {
-		// TODO Auto-generated constructor stub
 		this.fileName = fileName;
 		counter = 0L;
 		migrated = false;
 		try {
-			fileStream = new RandomAccessFile(fileName, "RandomFile");
+			fileStream = new RandomAccessFile(fileName, "rws"); /* read & write and synchronize */
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * read a byte from specified position.
+	 * Read a byte of data from specified position.
 	 */
 	@Override
 	public int read() throws IOException {
-		// TODO Auto-generated method stub
 		int readByte = 0;
 		if (migrated) {
 			fileStream = new RandomAccessFile(fileName, "rws");
 			migrated = false;
 		}
 		
-		fileStream.seek(counter);
+		fileStream.seek(counter);	/* Sets the file-pointer offset, at which the next read occurs. */
 		readByte = fileStream.read();
 		if (readByte != -1) {
 			counter++;
@@ -62,9 +58,8 @@ public class TransactionalFileInputStream extends InputStream implements  Serial
 
 	public void closeStream() {
 		try {
-			fileStream.close(); /* close the file handler of last node */
+			fileStream.close();	/* close the file handler of last node */
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error in closing input file");
 			e.printStackTrace();
 		} 
