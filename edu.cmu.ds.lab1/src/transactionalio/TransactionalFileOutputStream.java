@@ -1,5 +1,15 @@
 package transactionalio;
 
+/**
+ * When write is called from the class, it:
+ * 1. Opens the file
+ * 2. Set the file pointer to the desired position where the next write is going to happen
+ * 3. Perform the operation
+ * 4. Close the file.
+ * 
+ * To cache file handler, only close it when migrated.
+ * 
+ */
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,33 +25,33 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 	private transient RandomAccessFile fileStream;
 	
 	public TransactionalFileOutputStream(String fileName, boolean migrated) {
-		// TODO Auto-generated constructor stub
 		this.fileName = fileName;
 		counter = 0L;
 		migrated = false;
 		try {
 			fileStream = new RandomAccessFile(fileName, "rws");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	* Writes the specified byte to this file,
+	* starting at the current file pointer.
+	*/
 	@Override
 	public void write(int b) throws IOException {
-		// TODO Auto-generated method stub
 		if (migrated) {
 			fileStream = new RandomAccessFile(fileName, "rws");
 			migrated = false;
 		}
-		fileStream.seek(counter++);
+		fileStream.seek(counter++);	/* Sets the file-pointer offset, at which the next write occurs, update counter */
 		fileStream.write(b);
 	}
 	
 	
 	/**
-	 * Writes b.length bytes from the specified byte array to this 
-	 * file output stream.
+	 * Writes b.length bytes from the specified byte array to this file, 
+	 * starting at the current file pointer.
 	 */
 	@Override
 	public void write(byte[] b) throws IOException {
@@ -72,7 +82,6 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 		try {
 			fileStream.close(); /* close the file handler of last node */
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Error in closing input file");
 			e.printStackTrace();
 		} 
