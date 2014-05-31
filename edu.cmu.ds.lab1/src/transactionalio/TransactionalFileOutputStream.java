@@ -20,7 +20,7 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 		counter = 0L;
 		migrated = false;
 		try {
-			fileStream = new RandomAccessFile(fileName, "RandomFile");
+			fileStream = new RandomAccessFile(fileName, "rws");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

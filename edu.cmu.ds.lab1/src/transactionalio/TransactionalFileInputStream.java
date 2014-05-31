@@ -32,7 +32,7 @@ public class TransactionalFileInputStream extends InputStream implements  Serial
 		counter = 0L;
 		migrated = false;
 		try {
-			fileStream = new RandomAccessFile(fileName, "RandomFile");
+			fileStream = new RandomAccessFile(fileName, "rws");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class TransactionalFileInputStream extends InputStream implements  Serial
 	}
 	
 	/**
-	 * read a byte from specified position.
+	 * read a byte of data from specified position.
 	 */
 	@Override
 	public int read() throws IOException {
