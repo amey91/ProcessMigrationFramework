@@ -10,4 +10,26 @@ public class StatusMessages {
 	public final static int LIST_CLIENTS = 4;
 	public final static int LIST_PROCESSES = 5;
 
+
+	/* Message Formats used in the project
+	 * 
+	 * 1. SERVER TO CLIENT 
+	 * 		a. "MIGRATE process pid clientp ip clientport port"  //pid=int, ip=string, port=int
+	 * 		b. "LAUNCH process p" //p is java reflections class type
+	 * 		c. "REMOVE process pid"
+	 * 		d.  
+	 * 
+	 * 2. CLIENT TO SERVER
+	 * 		a. 
+	 * 
+	 * 3. CONSOLE TO SERVER
+	 * 		a. "ProcessManager LIST_PROCESSES" // display all the existing processes at the server
+	 * 		b. "ProcessManager SUSPEND pid" // suspend message with id=pid
+	 * 		c. "ProcessManager TRYSUSPEND pid" // check if given process id exists on the server. Returns okay or notokay
+	 * 
+	 * 4. SERVER TO CONSOLE
+	 * 		a. "okay" // when process to be suspended exists on the server
+	 * 		b. "notokay" // when process to be suspended exists on the server
+	 */
+
 }

@@ -58,14 +58,15 @@ public class Server {
 	}
 
 	public static void main(String args[]) throws IOException{
-		/*  
+		int portNumber = Server.INITIAL_PORT;  
 		if (args.length != 1) {
-	            System.err.println("Usage: java EchoServer <port number>");
-	            System.exit(1);
+	            System.err.println("No port specified. Using default port 2222");
 	        }
-      	*/  
-			clients = new HashMap<Integer, ClientInfo>();
-	        int portNumber = Server.INITIAL_PORT;
+		else
+			portNumber = Integer.parseInt(args[1]);
+			
+		clients = new HashMap<Integer, ClientInfo>();
+	        
 	        
 			        try {
 			        	// listen at initial connection port
@@ -110,8 +111,9 @@ public class Server {
 	// displays all the clients connected to the server 
 	public static void displayClients(){
 		
+		System.out.println("\nTotal clients="+Server.clients.size());
 		for(int i : Server.clients.keySet())
-			System.out.println("Client " +i+": "+ Server.clients.get(i)+" ");
+			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" port="+clients.get(i).location.socketNumber);
 	}
 	
 } // end of server class
@@ -149,7 +151,7 @@ class ClientInfo{
 class ClientHandler extends Thread{
 
 	public DataInputStream inputStream=null;
-	public PrintStream printStream = null;
+	public PrintWriter printStream = null;
 	public Socket clientSocket = null;
 	private int threadIdentifier;
 	
@@ -163,28 +165,34 @@ class ClientHandler extends Thread{
 		try{
 			//create streams for given socket
 			inputStream = new DataInputStream(clientSocket.getInputStream());
-		    printStream = new PrintStream(clientSocket.getOutputStream());
+		    printStream =  new PrintWriter(clientSocket.getOutputStream(), true);
 		    //tell server that it is ready
-		    System.out.println("New Client connection established.");
 		    
 		    while (true) {
 		        String line = inputStream.readLine();
-		        String words[]=line.split("\\s+");
-		        
-		        //check if messagefrom ProcessManager
-		        if(words[0].equals("ProcessManager")){
+		        printStream.println("okay"); 
+		        String words[]=line.split(" ");
+		        System.out.println("Called by Client:"+ line);
+		        //check if message from ProcessManager
+		        if(words[0].equalsIgnoreCase("ProcessManager") && words.length>0){
 		        	switch(Integer.parseInt(words[1])){
-		        	case(StatusMessages.LIST_CLIENTS):
-		        		Server.displayClients();
-		        		break;
-		        	case(StatusMessages.LIST_PROCESSES):break;
-		        	//case(StatusMessages.)
+			        	case(StatusMessages.LIST_CLIENTS):
+			        		System.out.println("Called by Message Manager: display clients below..");
+			        		Server.displayClients();
+			        		break;
+			        	case(StatusMessages.LIST_PROCESSES):{
+			        		break;
+			        	}
+			        	//case(StatusMessages.)
 		        	}
 		        }
-		        if (line.startsWith("/quit")) {
-		          break;
+		        //if not process manager, then it is a regular client
+		        else{
+			        if (line.startsWith("/quit")) {
+			          break;
+			        }
+			        printStream.println("Received at Server: "+line);
 		        }
-		        printStream.println("Receiveddasd: "+line);
 		    }
 		    //free allocated communication paths
 		    inputStream.close();

@@ -9,49 +9,45 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import network.Client;
 import network.Server;
 import network.StatusMessages;
 
 public class ProcessManager {
-	public static int choice = 0;
+	
+	// message code when sending messages to server
 	public static int messageCode = 0;
-	static boolean sendMessage=false;
+	// flag indicating that a message is ready to be sent
+	public static boolean sendMessage=false;
+	// actual message to be sent
+	public static String messageContent ="";
+	
 	
 	public static void main(String args[]){
-		Scanner sc= new Scanner(System.in); 
-		log("Console for Process Management.");
+		ContactServer.log("Console for Process Management.");
 		Thread contact = new Thread(new ContactServer());
 		contact.start();
-		while(true){
-			log("Press: 1.List Processes 2.Suspend Process 3.Remove Process 4. Migrate Process: ");
-			ProcessManager.choice = sc.nextInt();
-			switch(choice){
-			case(1): 
-				ProcessManager.messageCode = StatusMessages.LIST_PROCESSES;
-				ProcessManager.sendMessage = true;
-				break;
-			
-			case(2): break;
-			
-			case(3): break;
-			
-			case(4): break;
-			
-			default: break;
-			}
-		}
-		
-		 
+
 	}
 	
-	static void log(String a){
-		System.out.println(a);
-	}
+
 
 }
 
 class ContactServer extends Thread {
-
+	
+	//choice from user
+	public static int choice = 0;
+	
+	//for user input
+	Scanner sc= new Scanner(System.in); 
+	
+	//make printing stuff easier in the console by wrapping function name
+	static void log(String a){
+		System.out.println(a);
+	}
+	
+	//run method for Contacting server for user console
 	@Override
 	public void run() {
 		String hostName = Server.HOSTNAME;
@@ -62,19 +58,70 @@ class ContactServer extends Thread {
         	//try to connect to server
             Socket echoSocket = new Socket(hostName, portNumber);
             //open print stream
-            PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
+            PrintWriter outToServer = new PrintWriter(echoSocket.getOutputStream(), true);
             // open in stream
-            BufferedReader in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-            // standard input stream
-            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-            // store input
-            String userInput;
+            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+ 
+            /////////////
+            
+            
+            String reply;
+            
             while(true){
-		            if (ProcessManager.sendMessage) {
-		                out.println("ProcessManager "+ProcessManager.messageCode);
-		                ProcessManager.sendMessage=false;
-		            }
-            }
+    			log("Press: 1.List Processes 2.Suspend Process 3.Remove Process 4. Migrate Process: 5.Create Process");
+    			choice = sc.nextInt();
+    			switch(choice){
+    			case(1): 
+    				System.out.println("Process manager sending list request");
+    				outToServer.println("ProcessManager "+StatusMessages.LIST_PROCESSES);
+                	reply = inFromServer.readLine();
+    				System.out.println("echo: Process manager received: " + reply);
+    				// set the message so that server knows it is process manager
+    				// ProcessManager.messageCode = StatusMessages.LIST_PROCESSES;
+    				// ProcessManager.messageContent = StatusMessages.LIST_PROCESSES+"";
+    				//  ProcessManager.sendMessage = true;
+    				break;
+    			
+    			case(2): 
+    				
+    				System.out.println("Process manager sending suspend request");
+    				int pid;
+    				log("Enter process id to be suspended");
+    				pid = sc.nextInt();
+					outToServer.println("ProcessManager TRYSUSPEND "+pid);
+	            	reply = inFromServer.readLine();
+	            	if(reply.equals("notokay"))
+	            		log("echo: Process manager received: " + reply);
+	            	else{
+	            		outToServer.println("ProcessManager SUSPEND "+pid);
+	            	}
+    				break;
+    			
+    			case(3): break;
+    			
+    			case(4): break;
+    			
+    			case(5): 
+    			{	
+    				String[] temp = null; 
+    				try {
+    					network.Client.main(temp);
+    				} catch (UnknownHostException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				}
+    				break;
+    			}
+    				
+    			
+    			default: break;
+    			}
+    		}
+            /////////////////////
+            
         } catch (UnknownHostException e) {
             System.err.println("Unknown host " + hostName);
             System.exit(1);

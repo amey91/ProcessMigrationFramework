@@ -36,16 +36,16 @@ public class Client {
 	        	//try to connect to server
 	            Socket echoSocket = new Socket(hostName, portNumber);
 	            //open print stream
-	            PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
+	            PrintWriter outToServer = new PrintWriter(echoSocket.getOutputStream(), true);
 	            // open in stream
-	            BufferedReader in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
-	            // standard input stream
-	            BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+	            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+	            // standard input stream for user input
+	            BufferedReader stdUserInput = new BufferedReader(new InputStreamReader(System.in));
 	            // store input
 	            String userInput;
-	            while ((userInput = stdIn.readLine()) != null) {
-	                out.println(userInput);
-	                System.out.println("echo: " + in.readLine());
+	            while ((userInput = stdUserInput.readLine()) != "") {
+	            	outToServer.println(userInput);
+	                System.out.println("echo: " + inFromServer.readLine());
 	            }
 	        } catch (UnknownHostException e) {
 	            System.err.println("Unknown host " + hostName);
