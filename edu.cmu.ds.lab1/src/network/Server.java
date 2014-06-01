@@ -31,6 +31,8 @@ import java.lang.Runnable;
 public class Server {
 	// default port for initial communication
 	public static final int INITIAL_PORT = 2222;
+	// default port for heart beat
+	public static final int HEARTBEAT_PORT =3333; 
 	//default initial host name
 	public static String HOSTNAME = "127.0.0.1";
 	

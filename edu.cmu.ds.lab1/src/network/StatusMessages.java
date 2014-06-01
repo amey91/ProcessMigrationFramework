@@ -30,6 +30,10 @@ public class StatusMessages {
 	 * 4. SERVER TO CONSOLE
 	 * 		a. "okay" // when process to be suspended exists on the server
 	 * 		b. "notokay" // when process to be suspended exists on the server
+	 * 
+	 * 5. CLIENT TO CLIENT
+	 * 		a. ???? implement serialized objects here
+	 * 
 	 */
 
 }

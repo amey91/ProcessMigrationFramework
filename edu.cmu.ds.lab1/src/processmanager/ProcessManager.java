@@ -68,12 +68,12 @@ class ContactServer extends Thread {
             String reply;
             
             while(true){
-    			log("Press: 1.List Processes 2.Suspend Process 3.Remove Process 4. Migrate Process: 5.Create Process");
+    			log("Press: 1.List Clients 2. List Processes 3.Suspend Process 4.Remove Process 5. Migrate Process: 6.Create Process");
     			choice = sc.nextInt();
     			switch(choice){
     			case(1): 
     				System.out.println("Process manager sending list request");
-    				outToServer.println("ProcessManager "+StatusMessages.LIST_PROCESSES);
+    				outToServer.println("ProcessManager "+StatusMessages.LIST_CLIENTS);
                 	reply = inFromServer.readLine();
     				System.out.println("echo: Process manager received: " + reply);
     				// set the message so that server knows it is process manager
@@ -93,7 +93,7 @@ class ContactServer extends Thread {
 	            	if(reply.equals("notokay"))
 	            		log("echo: Process manager received: " + reply);
 	            	else{
-	            		outToServer.println("ProcessManager SUSPEND "+pid);
+	            		outToServer.println("ProcessManager SUSPEND "+pid); 
 	            	}
     				break;
     			
