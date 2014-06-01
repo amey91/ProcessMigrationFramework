@@ -54,6 +54,11 @@ public class Client {
 	            System.err.println("Couldn't get I/O for the connection to " + hostName);
 	            System.exit(1);
 	        } 
+	}//end of main
+	
+	public void send(){
+		String msgFromServer = "This is sent by client 1 to clent 2";
+		// TODO
 	}
 }
 
