@@ -68,12 +68,14 @@ public class Server {
 			portNumber = Integer.parseInt(args[1]);
 			
 		clients = new HashMap<Integer, ClientInfo>();
-	        
+		// setup the hearbeat socket for the server that listens to clients 
+		ServerSocket serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
+		new Thread(new ReceiveHearBeats(serverSocket1)).start();
 	        
 			        try {
 			        	// listen at initial connection port
 			            ServerSocket serverSocket = new ServerSocket(Server.INITIAL_PORT);
-			
+			            
 			            while(true){
 					            //accept a new client connection by listening to port
 					            Socket clientSocket = serverSocket.accept();    
@@ -94,6 +96,7 @@ public class Server {
 					            		clientSocket.getInputStream()));
 					            String receiverPortInString = inputStream.readLine();
 							    String[] port = receiverPortInString.split(" ");
+							    //if the client did not inform me of its listening port
 							    if(!port[0].equalsIgnoreCase("MyReceiver")){
 							    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
 							    	System.exit(0);
@@ -131,37 +134,6 @@ public class Server {
 	}
 	
 } // end of server class
-
-
-//this class stores and returns information about client
-class ClientInfo{
-	public int clientId;
-	public Thread clientHandler;
-	public ArrayList processes;
-	public Location location;
-	public int clientsideReceiverPort;
-	public int receiverPort;
-	
-	ClientInfo(int id, Thread ch, Socket clientSocket, int receiverPort){
-		this.clientId = id;
-		this.clientHandler = ch;
-		this.processes = new ArrayList<Object>();
-		this.location = new Location(clientSocket.getInetAddress().toString(),clientSocket.getPort());
-		this.receiverPort = receiverPort;
-	}
-	
-	public String toString(){
-		return " clientId "+clientId+" clientHandler "+clientHandler+" processes "+displayProcesses(this.processes);
-	}
-	
-	public String displayProcesses(ArrayList ob){
-		String s="";
-		for(int i=0; i<processes.size();i++)
-			s = s + processes.get(i)+",";
-		return s;
-	}
-	
-}
 
 
 //this class handles each client separately as a thread
@@ -224,56 +196,61 @@ class ClientHandler extends Thread{
 }
 
 class ReceiveHearBeats extends Thread{
+	
+	ServerSocket serverSocket;
+	
+	public ReceiveHearBeats(ServerSocket s){
+		serverSocket = s;
+	}
+	
 	@Override
 	public void run(){
-		ServerSocket serverSocket1 = null;
-		try {
-			serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		 
 		
 		while(true){
             //accept a new client connection by listening to port
-            Socket clientSocket1 = null;
 			 
 			try {
-				clientSocket1 = serverSocket1.accept();
-				// read hearbeat 
+				
+				 Socket clientSocket1 = serverSocket.accept();
+				// read heartbeat 
 				BufferedReader inputStream = new BufferedReader(new InputStreamReader(
 						clientSocket1.getInputStream()));
 				String receiverPortInString = inputStream.readLine();
+				HandleHeartBeat hhb = new HandleHeartBeat(receiverPortInString);
+				new Thread(hhb).start();
 				String[] port = receiverPortInString.split(" ");
-			    if(!port[0].equalsIgnoreCase("MyReceiver")){
+				//extract client key
+			    if(!port[0].equalsIgnoreCase("HEARTBEAT")){
 			    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
 			    	System.exit(0);
 			    }
+			    
+			    int receiverPort = Integer.parseInt(port[1]);
+	            //TODO implement client handler after updating client info
+			    
+			    
+			    
 			}catch (IOException e) {
 				// Auto-generated catch block
 				e.printStackTrace();
-			}
-		    
-		    }
-		    
+			}    
+		}		
+	}//end of run
+	
+}// end of Receive Heart Beats 
 
-		    int receiverPort = Integer.parseInt(port[1]);
-            //TODO implement client handler
-		    
-            //once client connects, create a output stream at the socket
-     //       Thread pp = new ClientHandler();
-     //       Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
-     //       Server.displayClients();
-     //       pp.start();
-		}//end of while
-		
-	}// end of run
-}
 
 class HandleHeartBeat extends Thread {
+	String firstMsg;
+	public HandleHeartBeat(String receiverPortInString) {
+		firstMsg = receiverPortInString;
+	}
+
 	@Override
 	public void run(){
 		//TODO implement thread to update hashmap
 	}
 	
 	
-}
+}// end of handle heart beats
