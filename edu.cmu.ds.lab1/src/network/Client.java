@@ -216,35 +216,35 @@ public class Client {
 		public static void launch(String[] args) {
 			MigratableProcess newProcess = null;
 			try {
-				Class<MigratableProcess> processClass = (Class<MigratableProcess>) Class.forName(args[2]);
+				Class<MigratableProcess> processClass = (Class<MigratableProcess>) Class.forName(args[1]);
 				Constructor<?> processConstructor = processClass
 						.getConstructor(String[].class);
-				Object[] processArgs = { Arrays.copyOfRange(args, 3, args.length) };
+				Object[] processArgs = { Arrays.copyOfRange(args, 2, args.length) };
 				newProcess = (MigratableProcess) processConstructor
 						.newInstance(processArgs);
 			} catch (ClassNotFoundException e) {
-				System.out.println("Could not find class " + args[2]);
+				System.out.println("Could not find class " + args[1]);
 				e.printStackTrace();
 				return;
 			} catch (SecurityException e) {
 				System.out.println("Security Exception getting constructor for "
-						+ args[2]);
+						+ args[1]);
 				return;
 			} catch (NoSuchMethodException e) {
 				System.out.println("Could not find proper constructor for "
-						+ args[2]);
+						+ args[1]);
 				return;
 			} catch (IllegalArgumentException e) {
-				System.out.println("Illegal arguments for " + args[2]);
+				System.out.println("Illegal arguments for " + args[1]);
 				return;
 			} catch (InstantiationException e) {
-				System.out.println("Instantiation Exception for " + args[2]);
+				System.out.println("Instantiation Exception for " + args[1]);
 				return;
 			} catch (IllegalAccessException e) {
-				System.out.println("IIlegal access exception for " + args[2]);
+				System.out.println("IIlegal access exception for " + args[1]);
 				return;
 			} catch (InvocationTargetException e) {
-				System.out.println("Invocation target exception for " + args[2]);
+				System.out.println("Invocation target exception for " + args[1]);
 				return;
 			} catch (Exception e) {
 				System.err.println(e.toString());

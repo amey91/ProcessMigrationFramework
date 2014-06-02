@@ -118,45 +118,26 @@ class ContactServer extends Thread {
     			
     			case(4): break;
     			
-   /* 			case(5): 
+    			case(5): 
     			{
     				int clientID;
     				System.out.println("Launching new process");
     				log("Enter clientID, processName, processTYPE to launch");
     				clientID = sc.nextInt();
-    				outToServer.println("New Process started on Client" + clientID);
-    				
-    					try {
-    						client.launch(args[1]);
-    					} catch (SlaveServiceException e) {
-    						System.err.println("Slave Serivce Ended with Exception");
-    					}
-    					System.out.println("Slave Serivce Ended");
-    				}
-    				
-    				else {
-    					System.out.println("Usage: java ProcessManager [-c <master hostname or ip>]");
-    				}
+    				log("New process launched");
+    				String[] input = null;
+    				input[0]= sc.next();
+    				input[1]= sc.next();
+    				outToServer.println("LAUNCH" + clientID + input[0] + input[1] );
+    					
+    						Server.clients.get(clientID).launch(input);
+    					
+    						break;
     			}
-    				break;
-    			
     			default: break;
     			}
-    		
-        
-            
-        }catch (UnknownHostException e) {
-            System.err.println("Unknown host " + hostName);
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " + hostName);
-            System.exit(1);
-        }
-		
-	} */
-	
-    			}
             }
+        
         }catch(Exception e){}
 	}
 }

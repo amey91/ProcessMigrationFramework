@@ -2,6 +2,7 @@ package network;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ClientInfo {
 	
@@ -53,5 +54,10 @@ public class ClientInfo {
 		for(int i=0; i<processes.size();i++)
 			s = s + processes.get(i)+",";
 		return s;
+	}
+
+	public void launch(String[] input) {
+		// TODO Auto-generated method stub
+		Client.launch(input);
 	}
 }

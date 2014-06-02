@@ -188,19 +188,26 @@ class ClientHandler extends Thread{
 			        		Server.displayClients();
 			        		break;
 			        	case(StatusMessages.LIST_PROCESSES):{
+			        		
 			        		break;
 			        	}
 			        	//case(StatusMessages.)
 		        	}
+		        }
+		        else if(words[0].equalsIgnoreCase("LAUNCH") && words.length>0){
+		        	System.out.println("Process Launched");
 		        }
 		        //if not process manager, then it is a regular client
 		        else{
 			        if (line.startsWith("/quit")) {
 			          break;
 			        }
+			        
+			        	
+			        }
 			        printStream.println("Received at Server: "+line);
 		        }
-		    }
+		    
 		    //free allocated communication paths
 		    inputStream.close();
 			printStream.close();
