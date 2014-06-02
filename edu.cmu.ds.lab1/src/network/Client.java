@@ -311,23 +311,32 @@ class ClientHeartbeat extends Thread{
 	
 	@Override 
 	public void run() {
-		Socket heartbeatSocket;
-		PrintWriter outToServer;
+		//Socket heartbeatSocket;
+		//PrintWriter outToServer;
 		while(true){
 			try{
 				//open up a socket for heartbeat to the server
-				heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
+				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
 		        //open print stream not in use
-		        outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
+				PrintWriter outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
 		        // open in stream - not being used
 		        //BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
 		        //heartbeatSocket.getInputStream()));
-		        break;
+		        outToServer.println("HEARTBEAT "+ clientKey);
+				System.out.println("SENT = HEARTBEAT "+ clientKey);
+				heartbeatSocket.close();
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// Auto-generated catch block
+					// dont kill the process, catch exception and ignore it
+				}
 			} catch(Exception e){
 				System.out.println("Process Manager could not contact client. Retrying.");
 				continue;
 			}
 		}
+<<<<<<< HEAD
 		while(true){
 			outToServer.println("HEARTBEAT "+ clientKey);
 			//System.out.println("SENT = HEARTBEAT "+ clientKey);	//TODO
@@ -339,5 +348,8 @@ class ClientHeartbeat extends Thread{
 				// dont kill the process, catch exception and ignore it
 			}
 		}//end of while
+=======
+		
+>>>>>>> 87fb19094b4526445e526143b894e125f32298f5
 	}
 }

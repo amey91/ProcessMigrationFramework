@@ -184,12 +184,21 @@ class ProcessManagerHeartbeat extends Thread{
 				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
 		        //open print stream - not in use
 		        outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
-		        break;
+		        outToServer.println("HEARTBEAT "+ this.clientKey);
+				System.out.println("SENT = HEARTBEAT "+ this.clientKey);
+				heartbeatSocket.close();
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// Auto-generated catch block
+					// dont kill the process, catch exception and ignore it
+				}
 			} catch(Exception e){
 				System.out.println("Process Manager could not contact client. Retrying.");
 				continue;
 			}
 		}
+<<<<<<< HEAD
 		while(true){
 			outToServer.println("HEARTBEAT "+ this.clientKey);
 			//System.out.println("SENT = HEARTBEAT "+ this.clientKey);	//TODO
@@ -201,5 +210,7 @@ class ProcessManagerHeartbeat extends Thread{
 				// dont kill the process, catch exception and ignore it
 			}
 		}//end of while
+=======
+>>>>>>> 87fb19094b4526445e526143b894e125f32298f5
 	}//end of run
 }
