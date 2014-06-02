@@ -10,8 +10,7 @@ public class ClientInfo {
 	public Location location;
 	public int clientsideReceiverPort;
 	public int receiverPort;
-	java.util.Date currentDate = new java.util.Date();
-	long currenttimeInMillis = currentDate.getTime();
+	public long currenttimeInMillis = 0;
 
 	
 	ClientInfo(int id, Thread ch, Socket clientSocket, int receiverPort){
@@ -20,6 +19,7 @@ public class ClientInfo {
 		this.processes = new ArrayList<Object>();
 		this.location = new Location(clientSocket.getInetAddress().toString(),clientSocket.getPort());
 		this.receiverPort = receiverPort;
+		java.util.Date currentDate = new java.util.Date();
 		this.currenttimeInMillis = currentDate.getTime();
 	}
 	

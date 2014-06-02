@@ -68,6 +68,7 @@ public class Server {
 			portNumber = Integer.parseInt(args[1]);
 			
 		clients = new HashMap<Integer, ClientInfo>();
+		
 		// setup the hearbeat socket for the server that listens to clients 
 		ServerSocket serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
 		new Thread(new ReceiveHearBeats(serverSocket1)).start();
@@ -130,7 +131,7 @@ public class Server {
 		
 		System.out.println("\nTotal clients="+Server.clients.size());
 		for(int i : Server.clients.keySet())
-			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort);
+			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).currenttimeInMillis);
 	}
 	
 } // end of server class
@@ -197,10 +198,10 @@ class ClientHandler extends Thread{
 
 class ReceiveHearBeats extends Thread{
 	
-	ServerSocket serverSocket;
+	ServerSocket heartbeatSocket;
 	
 	public ReceiveHearBeats(ServerSocket s){
-		serverSocket = s;
+		heartbeatSocket = s;
 	}
 	
 	@Override
@@ -209,47 +210,53 @@ class ReceiveHearBeats extends Thread{
 		
 		while(true){
             //accept a new client connection by listening to port
-			 
 			try {
 				
-				 Socket clientSocket1 = serverSocket.accept();
+				Socket clientSocket1 = heartbeatSocket.accept();
 				// read heartbeat 
 				BufferedReader inputStream = new BufferedReader(new InputStreamReader(
 						clientSocket1.getInputStream()));
 				String receiverPortInString = inputStream.readLine();
 				HandleHeartBeat hhb = new HandleHeartBeat(receiverPortInString);
 				new Thread(hhb).start();
-				String[] port = receiverPortInString.split(" ");
-				//extract client key
-			    if(!port[0].equalsIgnoreCase("HEARTBEAT")){
-			    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
-			    	System.exit(0);
-			    }
-			    
-			    int receiverPort = Integer.parseInt(port[1]);
-	            //TODO implement client handler after updating client info
-			    
-			    
 			    
 			}catch (IOException e) {
 				// Auto-generated catch block
 				e.printStackTrace();
 			}    
-		}		
+		} // end of while		
 	}//end of run
-	
 }// end of Receive Heart Beats 
 
 
 class HandleHeartBeat extends Thread {
-	String firstMsg;
+	String hbMsg;
+	java.util.Date currentDate = new java.util.Date();
+	
 	public HandleHeartBeat(String receiverPortInString) {
-		firstMsg = receiverPortInString;
+		hbMsg = receiverPortInString;
 	}
 
 	@Override
 	public void run(){
-		//TODO implement thread to update hashmap
+		//split input to receive client key
+		String[] keyArray = hbMsg.split(" ");
+		//extract client key
+	    if(!keyArray[0].equalsIgnoreCase("HEARTBEAT")||keyArray.length<2){
+	    	System.out.println("First Message is not not as excepted"+ hbMsg);
+	    	System.exit(0);
+	    }
+	    
+	    int clientKey = Integer.parseInt(keyArray[1]);
+        //TODO implement client handler after updating client info
+	    if(!Server.clients.containsKey(clientKey)){
+	    	System.out.println("Client with key "+clientKey+" does not exist");
+	    	System.exit(0);
+	    }
+	    else{
+	    	Server.clients.get(clientKey).currenttimeInMillis = currentDate.getTime();
+	    }
+	    
 	}
 	
 	
