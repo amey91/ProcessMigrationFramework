@@ -147,17 +147,16 @@ class ContactServer extends Thread {
     			default: break;
     			}
             }
-<<<<<<< HEAD
         
         }catch(Exception e){}
 	}
-=======
-        }catch(Exception e){
+
+       
         	
-        }
+        
 	}//end of run
->>>>>>> 9975e7db6afc0ddfbc0c66e082ad74a2a7f3cddc
-}
+
+
 
 
 

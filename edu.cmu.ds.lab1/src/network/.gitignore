@@ -12,3 +12,4 @@
 /ClientHeartbeat.class
 /HandleHeartBeat.class
 /ReceiveHearBeats.class
+/DeleteTimedoutClients.class
