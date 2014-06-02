@@ -25,7 +25,7 @@ public class ClientInfo {
 	public int receiverPort; 
 	
 	//time since last message
-	public long currenttimeInMillis = 0; 
+	public long lastSeen = 0; 
 	
 	//true for process manager 
 	boolean processManager; 
@@ -37,7 +37,7 @@ public class ClientInfo {
 		this.location = new Location(clientSocket.getInetAddress().toString(),clientSocket.getPort());
 		this.receiverPort = receiverPort;
 		java.util.Date currentDate = new java.util.Date();
-		this.currenttimeInMillis = currentDate.getTime();
+		this.lastSeen = currentDate.getTime();
 		processManager = false;
 	}
 	

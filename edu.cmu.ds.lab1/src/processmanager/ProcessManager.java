@@ -30,7 +30,7 @@ public class ProcessManager {
 		ContactServer.log("Console for Process Management.");
 		Thread contact = new Thread(new ContactServer());
 		contact.start();
-
+		
 	}
 	
 
@@ -77,10 +77,20 @@ class ContactServer extends Thread {
             String[] clientKeyArray = firstInput.split(" ");
             //if the first received message does not contain key, then exit
             if(!clientKeyArray[0].equalsIgnoreCase("YOURKEY")||clientKeyArray.length<1){
-            	System.out.println("Client failed to receive key from server. This client is exiting.");
+            	System.out.println("Process Manager failed to receive key from server. This process manager is exiting.");
             	System.out.println(firstInput);
             	System.exit(-1);
             }
+            //launch a thread for heartebat of process manager
+            try{
+	            // create a new client hearbeat thread for this client
+            	ProcessManagerHeartbeat pmhb = new ProcessManagerHeartbeat(Integer.parseInt(clientKeyArray[1]));
+	            Thread pmhbt = new Thread(pmhb);
+	            pmhbt.start();
+	            } catch(Exception e){
+	            	System.out.println("Error while parsing unique key given by server. Client is exiting");
+	            	System.exit(-1);
+	            }
             
             String reply;
             
@@ -137,7 +147,58 @@ class ContactServer extends Thread {
     			default: break;
     			}
             }
+<<<<<<< HEAD
         
         }catch(Exception e){}
 	}
+=======
+        }catch(Exception e){
+        	
+        }
+	}//end of run
+>>>>>>> 9975e7db6afc0ddfbc0c66e082ad74a2a7f3cddc
+}
+
+
+
+
+class ProcessManagerHeartbeat extends Thread{
+	public int clientKey =-1; 
+	
+	public ProcessManagerHeartbeat(){
+		
+	}
+	
+	public ProcessManagerHeartbeat(int clientKey){
+		this.clientKey=clientKey;
+		
+	}
+	
+	@Override 
+	public void run() {
+		PrintWriter outToServer;
+		while(true){
+			try{
+				//open up a socket for heartbeat to the server
+				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
+		        //open print stream - not in use
+		        outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
+		        break;
+			} catch(Exception e){
+				System.out.println("Process Manager could not contact client. Retrying.");
+				continue;
+			}
+		}
+		while(true){
+			outToServer.println("HEARTBEAT "+ this.clientKey);
+			System.out.println("SENT = HEARTBEAT "+ this.clientKey);
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// Auto-generated catch block
+				// dont kill the process, catch exception and ignore it
+			}
+		}//end of while
+	}//end of run
 }

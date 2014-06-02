@@ -72,7 +72,13 @@ public class Server {
 		// setup the hearbeat socket for the server that listens to clients 
 		ServerSocket serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
 		new Thread(new ReceiveHearBeats(serverSocket1)).start();
-	        
+	    
+		// setup the time out thread which looks intot he hashmap for timedout clients
+		// and deletes any which dont send heartbeats for more than 20 seconds
+		Thread tot = new Thread(new DeleteTimedoutClients());
+		tot.start();
+		
+		
 			        try {
 			        	// listen at initial connection port
 			            ServerSocket serverSocket = new ServerSocket(Server.INITIAL_PORT);
@@ -124,7 +130,6 @@ public class Server {
 					            }
 					            Server.displayClients();
 					            pp.start();
-					          
 			            }
 			            
 			        } catch (IOException e) {
@@ -144,7 +149,7 @@ public class Server {
 		int managerCount=0;
 		for(int i : Server.clients.keySet())
 			if(!Server.clients.get(i).processManager)
-				System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).currenttimeInMillis);
+				System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).lastSeen);
 			else
 				managerCount++;
 		System.out.println("Total clients="+(Server.clients.size()-managerCount)+" and ProcessManagers="+managerCount);
@@ -275,16 +280,64 @@ class HandleHeartBeat extends Thread {
 	    }
 	    
 	    int clientKey = Integer.parseInt(keyArray[1]);
-        //TODO implement client handler after updating client info
+        // implement client handler after updating client info
 	    if(!Server.clients.containsKey(clientKey)){
-	    	System.out.println("Client with key "+clientKey+" does not exist");
+	    	System.out.println("Client with key "+clientKey+" does not exist or has timed-out.");
 	    	System.exit(0);
 	    }
 	    else{
-	    	Server.clients.get(clientKey).currenttimeInMillis = currentDate.getTime();
+	    	Server.clients.get(clientKey).lastSeen = currentDate.getTime();
 	    }
 	    
 	}
 	
 	
 }// end of handle heart beats
+
+
+//this class is responsible for updating the hashmap
+// and eliminating clients which have timed out
+class DeleteTimedoutClients extends Thread {
+	
+	
+	public DeleteTimedoutClients(){
+		
+	}
+	
+	@Override
+	public void run(){
+		// for infinity
+		while(true){
+			System.out.println("TIMEOUT process begin...");
+			//for every entry in the client hashmap
+			for(int i : Server.clients.keySet()){
+				//if client is inactive for more than 20 seconds
+				java.util.Date currentDate = new java.util.Date();
+				long currentTime = currentDate.getTime();
+				long clientLastSeen = Server.clients.get(i).lastSeen;
+				System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));
+				if(currentTime - clientLastSeen >1){
+					// the client process has timed out. 
+					// delete it from the hashmap
+					System.out.println("TIMEOUT: Client with ID "+i+" timed-out and has been removed from records.");
+					Server.clients.remove(i);
+				}
+			}
+			
+			
+			//sleep for 10 seconds
+			try {
+				Thread.sleep(3000);
+				System.out.println("TIMEOUT resuming...");
+			} catch (InterruptedException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		}
+		
+		
+		
+	}
+}
