@@ -35,7 +35,7 @@ import processmanager.ProcessStatus;
 
 public class Client {
 	public Location location;
-	
+	public static int clientKey = -1;
 	private static HashMap<Integer, ProcessInfo> processMap = new HashMap<Integer, ProcessInfo>();
 	private static int processID = 0;
 	
@@ -66,9 +66,30 @@ public class Client {
 	            BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
 	            		echoSocket.getInputStream()));
 	            
-	            //tell the server the location of my clientside receiveing socket
+	            //tell the server the location of my clientside receiving socket
 	            // where all other clients can send serialized objects
 	            outToServer.println("MyReceiver "+ receiverPort);
+	            
+	            // now, server should send the unique client key for this client
+	            //String mixedClientKey = inFromServer.readLine();
+	            String firstInput = inFromServer.readLine();
+	            String[] clientKeyArray = firstInput.split(" ");
+	            //if the first received message does not contain key, then exit
+	            if(!clientKeyArray[0].equalsIgnoreCase("YOURKEY")||clientKeyArray.length<1){
+	            	System.out.println("Client failed to receive key from server. This client is exiting.");
+	            	System.out.println(firstInput);
+	            	System.exit(-1);
+	            }
+	            
+	            try{
+	            // create a new client hearbeat thread for this client
+	            ClientHeartbeat chb = new ClientHeartbeat(Integer.parseInt(clientKeyArray[1]));
+	            Thread chbt = new Thread(chb);
+	            chbt.start();
+	            } catch(Exception e){
+	            	System.out.println("Error while parsing unique key given by server. Client is exiting");
+	            	System.exit(-1);
+	            }
 	            
 	            // standard input stream for user input
 	            BufferedReader stdUserInput = new BufferedReader(new InputStreamReader(System.in));
@@ -157,7 +178,7 @@ public class Client {
 				}
 
 				// iterate through the process list and send back to server 
-				else if (str.equals("processlist")) {
+	/*			else if (str.equals("processlist")) {
 					for (Map.Entry<Integer, ProcessInfo> entry : processMap
 							.entrySet()) {
 						if (entry.getValue().process.finalize())
@@ -180,9 +201,15 @@ public class Client {
 					outToServer.write("process list finish\n");
 					outToServer.flush();
 				}
+<<<<<<< HEAD
 
 			}
 		*/
+=======
+*/
+			}///
+		}
+>>>>>>> 4b8e96644db46feee8287fb85ad0d322ad677d83
 
 		/**
 		 * Instantiate a new process
@@ -272,4 +299,48 @@ class ClientsideReceiver extends Thread{
 		}
 			
 	}// end of ClientsideReceiver run
+}
+
+class ClientHeartbeat extends Thread{
+	public int clientKey =-1; 
+	
+	public ClientHeartbeat(){
+		
+	}
+	
+	public ClientHeartbeat(int clientKey){
+		this.clientKey=clientKey;
+		
+	}
+	
+	@Override 
+	public void run() {
+		while(true){
+			try{
+				//open up a socket for heartbeat to the server
+				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
+		        //open print stream
+		        PrintWriter outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
+		        // open in stream
+		        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
+		        		heartbeatSocket.getInputStream()));
+		        
+		        outToServer.println("HEARTBEAT "+ clientKey);
+		        
+		        try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// Auto-generated catch block
+					// dont kill the process, catch exception and ignore it
+				}
+		        
+			}catch (UnknownHostException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
+		}//end of while
+	}
 }

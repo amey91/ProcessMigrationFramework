@@ -17,7 +17,7 @@ public class StatusMessages {
 	 * 		a. "MIGRATE process pid clientp ip clientport port"  //pid=int, ip=string, port=int
 	 * 		b. "LAUNCH process p" //p is java reflections class type
 	 * 		c. "REMOVE process pid"
-	 * 		d.  
+	 * 		d. "YOURKEY key" // key is the unique identifier for the lcient required for client identification and hearbeats
 	 * 
 	 * 2. CLIENT TO SERVER
 	 * 		a. 
