@@ -185,7 +185,7 @@ class ProcessManagerHeartbeat extends Thread{
 		        //open print stream - not in use
 		        outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
 		        outToServer.println("HEARTBEAT "+ this.clientKey);
-				System.out.println("SENT = HEARTBEAT "+ this.clientKey);
+				//System.out.println("SENT = HEARTBEAT "+ this.clientKey);
 				heartbeatSocket.close();
 				try {
 					Thread.sleep(2000);
