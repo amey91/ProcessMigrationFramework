@@ -88,13 +88,19 @@ public class Server {
 					            
 					            // read initial message containing client side receiving port 
 							    // for other clients to contact this particular client 
-					            DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
-							    String receiverPortInString = inputStream.readLine();
+					            PrintWriter outputStream = new PrintWriter(clientSocket.getOutputStream(), true);
+					            // open in stream
+					            BufferedReader inputStream = new BufferedReader(new InputStreamReader(
+					            		clientSocket.getInputStream()));
+					            String receiverPortInString = inputStream.readLine();
 							    String[] port = receiverPortInString.split(" ");
 							    if(!port[0].equalsIgnoreCase("MyReceiver")){
 							    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
 							    	System.exit(0);
 							    }
+							    outputStream.flush();
+							    outputStream.println("YOURKEY "+key);
+							    
 							    int receiverPort = Integer.parseInt(port[1]);
 					            
 							    
@@ -181,7 +187,7 @@ class ClientHandler extends Thread{
 		    
 		    while (true) {
 		        String line = inputStream.readLine();
-		        printStream.println("okay"); 
+		        printStream.flush();
 		        String words[]=line.split(" ");
 		        System.out.println("Called by Client:"+ line);
 		        //check if message from ProcessManager
@@ -213,6 +219,60 @@ class ClientHandler extends Thread{
 			System.out.println("Thread ended for client");
 		}
 		
+	}
+		
+}
+
+class ReceiveHearBeats extends Thread{
+	@Override
+	public void run(){
+		ServerSocket serverSocket1 = null;
+		try {
+			serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		while(true){
+            //accept a new client connection by listening to port
+            Socket clientSocket1 = null;
+			 
+			try {
+				clientSocket1 = serverSocket1.accept();
+				// read hearbeat 
+				BufferedReader inputStream = new BufferedReader(new InputStreamReader(
+						clientSocket1.getInputStream()));
+				String receiverPortInString = inputStream.readLine();
+				String[] port = receiverPortInString.split(" ");
+			    if(!port[0].equalsIgnoreCase("MyReceiver")){
+			    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
+			    	System.exit(0);
+			    }
+			}catch (IOException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+			}
+		    
+		    }
+		    
+
+		    int receiverPort = Integer.parseInt(port[1]);
+            //TODO implement client handler
+		    
+            //once client connects, create a output stream at the socket
+     //       Thread pp = new ClientHandler();
+     //       Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
+     //       Server.displayClients();
+     //       pp.start();
+		}//end of while
+		
+	}// end of run
+}
+
+class HandleHeartBeat extends Thread {
+	@Override
+	public void run(){
+		//TODO implement thread to update hashmap
 	}
 	
 	
