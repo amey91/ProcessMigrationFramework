@@ -4,14 +4,30 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class ClientInfo {
-	public int clientId;
+	
+	//unique id given by server to clients
+	public int clientId; 
+	
+	//handles commands from server to client
 	public Thread clientHandler;
+	
+	// a list of processes running on the server
 	public ArrayList processes;
+	
+	// location tuple of ip and port
 	public Location location;
+	
+	// a port where the receiver listens to the client
 	public int clientsideReceiverPort;
-	public int receiverPort;
-	public long currenttimeInMillis = 0;
-
+	
+	// port where the client is receiving from server
+	public int receiverPort; 
+	
+	//time since last message
+	public long currenttimeInMillis = 0; 
+	
+	//true for process manager 
+	boolean processManager; 
 	
 	ClientInfo(int id, Thread ch, Socket clientSocket, int receiverPort){
 		this.clientId = id;
@@ -21,6 +37,11 @@ public class ClientInfo {
 		this.receiverPort = receiverPort;
 		java.util.Date currentDate = new java.util.Date();
 		this.currenttimeInMillis = currentDate.getTime();
+		processManager = false;
+	}
+	
+	public void setProcessManager(){
+		this.processManager =true;
 	}
 	
 	public String toString(){

@@ -15,7 +15,7 @@ public class StatusMessages {
 	 * 
 	 * 1. SERVER TO CLIENT 
 	 * 		a. "MIGRATE process pid clientp ip clientport port"  //pid=int, ip=string, port=int
-	 * 		b. "LAUNCH process p" //p is java reflections class type
+	 * 		b. "LAUNCH client c process p " //p is java reflections class type
 	 * 		c. "REMOVE process pid"
 	 * 		d. "YOURKEY key" // key is the unique identifier for the lcient required for client identification and hearbeats
 	 * 
@@ -33,6 +33,15 @@ public class StatusMessages {
 	 * 
 	 * 5. CLIENT TO CLIENT
 	 * 		a. ???? implement serialized objects here
+	 * 
+	 * 
+	 * SPECIAL MESSAGES:
+	 * first messages sent:
+	 * client to server: MyReceiver int //int is port number
+	 * server to client: YOURKEY int //int is unique client key
+	 * 
+	 * heartbeat
+	 * client to server: HEARTBEAT int //int is unique client key 
 	 * 
 	 */
 

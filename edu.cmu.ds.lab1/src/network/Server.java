@@ -219,10 +219,12 @@ class ReceiveHearBeats extends Thread{
 				String receiverPortInString = inputStream.readLine();
 				HandleHeartBeat hhb = new HandleHeartBeat(receiverPortInString);
 				new Thread(hhb).start();
+				clientSocket1.close();
 			    
 			}catch (IOException e) {
 				// Auto-generated catch block
 				e.printStackTrace();
+				continue;
 			}    
 		} // end of while		
 	}//end of run

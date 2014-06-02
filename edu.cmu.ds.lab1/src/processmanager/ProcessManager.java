@@ -39,6 +39,8 @@ class ContactServer extends Thread {
 	//choice from user
 	public static int choice = 0;
 	
+	public int clientKey=-1;
+	
 	//for user input
 	Scanner sc= new Scanner(System.in); 
 	
@@ -62,7 +64,13 @@ class ContactServer extends Thread {
             // open in stream
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
  
-            /////////////
+            //tell the server that this is the process manager
+            outToServer.println("MyReceiver "+-1+" PROCESSMANAGER");
+            
+            //
+            
+            //take first input from server
+            String firstInput = inFromServer.readLine();
             
             
             String reply;
