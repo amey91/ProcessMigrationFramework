@@ -311,26 +311,13 @@ class DeleteTimedoutClients extends Thread {
 	public void run(){
 		// for infinity
 		while(true){
-<<<<<<< HEAD
-			//System.out.println("TIMEOUT process begin...");	//TODO
-=======
-			
->>>>>>> 87fb19094b4526445e526143b894e125f32298f5
+
 			//for every entry in the client hashmap
 			for(int i : Server.clients.keySet()){
 				//if client is inactive for more than 20 seconds
 				java.util.Date currentDate = new java.util.Date();
 				long currentTime = currentDate.getTime();
 				long clientLastSeen = Server.clients.get(i).lastSeen;
-<<<<<<< HEAD
-				//System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));	//TODO
-				if(currentTime - clientLastSeen >1){
-					// the client process has timed out. 
-					// delete it from the hashmap
-					//System.out.println("TIMEOUT: Client with ID "+i+" timed-out and has been removed from records.");	//TODO
-					Server.clients.remove(i);
-				}
-=======
 				System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));
 				//check for timeout
 				if(currentTime - clientLastSeen > 20000 && Server.clients.get(i).processManager==false){
@@ -345,17 +332,12 @@ class DeleteTimedoutClients extends Thread {
 						Server.clients.remove(i); 
 						
 					}
->>>>>>> 87fb19094b4526445e526143b894e125f32298f5
 			}
 			
 			//sleep for 10 seconds
 			try {
-<<<<<<< HEAD
-				Thread.sleep(3000);
-				//System.out.println("TIMEOUT resuming...");	//TODO
-=======
+
 				Thread.sleep(10000);
->>>>>>> 87fb19094b4526445e526143b894e125f32298f5
 			} catch (InterruptedException e) {
 				// Auto-generated catch block
 				e.printStackTrace();

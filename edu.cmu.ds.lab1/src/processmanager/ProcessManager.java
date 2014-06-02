@@ -198,19 +198,6 @@ class ProcessManagerHeartbeat extends Thread{
 				continue;
 			}
 		}
-<<<<<<< HEAD
-		while(true){
-			outToServer.println("HEARTBEAT "+ this.clientKey);
-			//System.out.println("SENT = HEARTBEAT "+ this.clientKey);	//TODO
-			
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// Auto-generated catch block
-				// dont kill the process, catch exception and ignore it
-			}
-		}//end of while
-=======
->>>>>>> 87fb19094b4526445e526143b894e125f32298f5
+
 	}//end of run
 }
