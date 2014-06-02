@@ -123,15 +123,15 @@ class ContactServer extends Thread {
     				else {
     					System.out.println("Usage: java ProcessManager [-c <master hostname or ip>]");
     				}
-    			}
+    			
     				
     			
     			default: break;
     			}
-    		}
-            /////////////////////
+    		
+        
             
-        } catch (UnknownHostException e) {
+        }catch (UnknownHostException e) {
             System.err.println("Unknown host " + hostName);
             System.exit(1);
         } catch (IOException e) {

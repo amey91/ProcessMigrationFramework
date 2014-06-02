@@ -267,7 +267,7 @@ class ReceiveHearBeats extends Thread{
 		}//end of while
 		
 	}// end of run
-}
+
 
 class HandleHeartBeat extends Thread {
 	@Override

@@ -201,15 +201,12 @@ public class Client {
 					outToServer.write("process list finish\n");
 					outToServer.flush();
 				}
-<<<<<<< HEAD
+
 
 			}
 		*/
-=======
-*/
-			}///
-		}
->>>>>>> 4b8e96644db46feee8287fb85ad0d322ad677d83
+
+
 
 		/**
 		 * Instantiate a new process
