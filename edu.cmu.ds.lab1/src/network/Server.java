@@ -193,15 +193,17 @@ class ClientHandler extends Thread{
 			        		Server.displayClients();
 			        		break;
 			        	case(StatusMessages.LIST_PROCESSES):{
+			        		System.out.println("Called by Message Manager: display processes below..");
 			        		
 			        		break;
 			        	}
-			        	//case(StatusMessages.)
+			        	case(StatusMessages.LAUNCH):{
+			        		System.out.println("New Process luanched.");
+			        		
+		        	}
 		        	}
 		        }
-		        else if(words[0].equalsIgnoreCase("LAUNCH") && words.length>0){
-		        	System.out.println("Process Launched");
-		        }
+		       
 		        //if not process manager, then it is a regular client
 		        else{
 			        if (line.startsWith("/quit")) {
@@ -308,18 +310,18 @@ class DeleteTimedoutClients extends Thread {
 	public void run(){
 		// for infinity
 		while(true){
-			System.out.println("TIMEOUT process begin...");
+			//System.out.println("TIMEOUT process begin...");	//TODO
 			//for every entry in the client hashmap
 			for(int i : Server.clients.keySet()){
 				//if client is inactive for more than 20 seconds
 				java.util.Date currentDate = new java.util.Date();
 				long currentTime = currentDate.getTime();
 				long clientLastSeen = Server.clients.get(i).lastSeen;
-				System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));
+				//System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));	//TODO
 				if(currentTime - clientLastSeen >1){
 					// the client process has timed out. 
 					// delete it from the hashmap
-					System.out.println("TIMEOUT: Client with ID "+i+" timed-out and has been removed from records.");
+					//System.out.println("TIMEOUT: Client with ID "+i+" timed-out and has been removed from records.");	//TODO
 					Server.clients.remove(i);
 				}
 			}
@@ -328,7 +330,7 @@ class DeleteTimedoutClients extends Thread {
 			//sleep for 10 seconds
 			try {
 				Thread.sleep(3000);
-				System.out.println("TIMEOUT resuming...");
+				//System.out.println("TIMEOUT resuming...");	//TODO
 			} catch (InterruptedException e) {
 				// Auto-generated catch block
 				e.printStackTrace();

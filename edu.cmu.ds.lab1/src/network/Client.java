@@ -330,7 +330,7 @@ class ClientHeartbeat extends Thread{
 		}
 		while(true){
 			outToServer.println("HEARTBEAT "+ clientKey);
-			System.out.println("SENT = HEARTBEAT "+ clientKey);
+			//System.out.println("SENT = HEARTBEAT "+ clientKey);	//TODO
 			
 			try {
 				Thread.sleep(2000);

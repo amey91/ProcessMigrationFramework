@@ -131,14 +131,16 @@ class ContactServer extends Thread {
     			case(5): 
     			{
     				int clientID;
-    				System.out.println("Launching new process");
-    				log("Enter clientID, processName, processTYPE to launch");
     				clientID = sc.nextInt();
-    				log("New process launched");
+    				System.out.println("Launching new Process");
+    				log("Enter clientID, processName, processTYPE to launch");
     				String[] input = null;
     				input[0]= sc.next();
     				input[1]= sc.next();
-    				outToServer.println("LAUNCH" + clientID + input[0] + input[1] );
+    				
+    				log("New process launched");
+    				
+    				outToServer.println("ProcessManager " +StatusMessages.LAUNCH+clientID + input[0] + input[1] );
     					
     						Server.clients.get(clientID).launch(input);
     					
@@ -190,7 +192,7 @@ class ProcessManagerHeartbeat extends Thread{
 		}
 		while(true){
 			outToServer.println("HEARTBEAT "+ this.clientKey);
-			System.out.println("SENT = HEARTBEAT "+ this.clientKey);
+			//System.out.println("SENT = HEARTBEAT "+ this.clientKey);	//TODO
 			
 			try {
 				Thread.sleep(2000);
