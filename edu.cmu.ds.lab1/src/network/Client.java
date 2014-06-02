@@ -27,7 +27,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import processmanager.MigratableProcess;
 import processmanager.ProcessInfo;
@@ -80,7 +79,7 @@ public class Client {
 	            	System.out.println(firstInput);
 	            	System.exit(-1);
 	            }
-	            
+	            System.out.println("Connection established. This client's ID is "+Integer.parseInt(clientKeyArray[1]));
 	            try{
 	            // create a new client hearbeat thread for this client
 	            ClientHeartbeat chb = new ClientHeartbeat(Integer.parseInt(clientKeyArray[1]));
@@ -312,31 +311,32 @@ class ClientHeartbeat extends Thread{
 	
 	@Override 
 	public void run() {
+		Socket heartbeatSocket;
+		PrintWriter outToServer;
 		while(true){
 			try{
 				//open up a socket for heartbeat to the server
-				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
-		        //open print stream
-		        PrintWriter outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
-		        // open in stream
-		        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
-		        		heartbeatSocket.getInputStream()));
-		        
-		        outToServer.println("HEARTBEAT "+ clientKey);
-		        
-		        try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// Auto-generated catch block
-					// dont kill the process, catch exception and ignore it
-				}
-		        
-			}catch (UnknownHostException e) {
+				heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
+		        //open print stream not in use
+		        outToServer = new PrintWriter(heartbeatSocket.getOutputStream(), true);
+		        // open in stream - not being used
+		        //BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
+		        //heartbeatSocket.getInputStream()));
+		        break;
+			} catch(Exception e){
+				System.out.println("Process Manager could not contact client. Retrying.");
+				continue;
+			}
+		}
+		while(true){
+			outToServer.println("HEARTBEAT "+ clientKey);
+			System.out.println("SENT = HEARTBEAT "+ clientKey);
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
 				// Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// Auto-generated catch block
-				e.printStackTrace();
+				// dont kill the process, catch exception and ignore it
 			}
 		}//end of while
 	}
