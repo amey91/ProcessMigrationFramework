@@ -23,6 +23,5 @@ public interface MigratableProcess extends Runnable, Serializable{
 	// a set of params with which the method was called 
 	public String toString(String paramArray[]);
 	
-	// any extra features t be done before method exits
-	void finalize();
+
 }

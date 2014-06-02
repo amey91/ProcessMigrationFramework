@@ -68,7 +68,7 @@ class ContactServer extends Thread {
             String reply;
             
             while(true){
-    			log("Press: 1.List Clients 2. List Processes 3.Suspend Process 4.Remove Process 5. Migrate Process: 6.Create Process");
+    			log("Press: 1.List Clients 2. List Processes 3.Remove Process 4.Migrate Process: 5.Create Process");
     			choice = sc.nextInt();
     			switch(choice){
     			case(1): 
@@ -102,18 +102,8 @@ class ContactServer extends Thread {
     			case(4): break;
     			
     			case(5): 
-    			{	
-    				String[] temp = null; 
-    				try {
-    					network.Client.main(temp);
-    				} catch (UnknownHostException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    				} catch (IOException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    				}
-    				break;
+    			{
+    				
     			}
     				
     			

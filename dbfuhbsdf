@@ -1,0 +1,159 @@
+[33mcommit 8562ee2eae9cc33303f50ef1ae429888762275d9[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Mon Jun 2 00:37:32 2014 -0400
+
+    resetting remote
+
+[33mcommit a2e3eb4cb8322b8c225fdd19701c8cc6b532b3f4[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Sun Jun 1 18:02:28 2014 -0400
+
+    Minor Change to Process List
+
+[33mcommit 7e26dee0cab2f9c7dfaff19c43ec2d4ded9336c5[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Sun Jun 1 18:01:54 2014 -0400
+
+    Process List
+
+[33mcommit a9dc9a23571fa64c18135138ec58f297148a2e0e[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Sun Jun 1 12:32:49 2014 -0400
+
+    merging with billy's saturdays' work[B
+
+[33mcommit 2b2c7bbecd557efa279fe5cb8004a44988551ef4[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Sat May 31 01:10:09 2014 -0400
+
+    Binary Differ
+
+[33mcommit f6ad2161d8a6fc985167909c0b3b992c62284b06[m
+Merge: 705daad 0620aa2
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Sat May 31 01:04:10 2014 -0400
+
+    Merge branch 'master' of https://github.com/gamoholic010/DistributedSystems
+
+[33mcommit 705daaded85df4b0164d190daf4edd52e061f510[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Sat May 31 01:03:46 2014 -0400
+
+    message formats half way done
+
+[33mcommit 0620aa2a7ab73914610e5ef30a535f2f7d5d7cb0[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Sat May 31 00:41:59 2014 -0400
+
+    Final Version of Read/Write Transaction I/O
+
+[33mcommit 55e5fdb50601e5a3c58512c87ce5e06981138d13[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Sat May 31 00:01:31 2014 -0400
+
+    I/O
+
+[33mcommit a8d39d895069baa6ab7f31286d5d50ccc3762096[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Fri May 30 21:42:15 2014 -0400
+
+    Minor File Change
+
+[33mcommit bd38dbc3fce96faf314924c2cf7904aadb6c1395[m
+Merge: d97eca5 5641dee
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 14:51:32 2014 -0400
+
+    Merge branch 'master' of https://github.com/gamoholic010/DistributedSystems
+
+[33mcommit d97eca53e3fec2d111c0ac7301605849bb643beb[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 14:51:19 2014 -0400
+
+    process manager created
+
+[33mcommit 5641deed5095bfc980ce022bb15077795094d777[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Fri May 30 11:58:21 2014 -0400
+
+    Minor Change to Write
+
+[33mcommit 3ca05c9ced323c5c392a8f6d651cfc8bcbdd64bf[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Fri May 30 11:56:24 2014 -0400
+
+    I/O Write
+
+[33mcommit aaa7ace30873ddff2e0efdfb20da9c1e48b378a6[m
+Author: lijuncheng16 <junchenl@andrew.cmu.edu>
+Date:   Fri May 30 11:51:48 2014 -0400
+
+    I/O Read
+
+[33mcommit 0e3681113cdb4f89d34891275535c2add3c6623e[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 02:50:32 2014 -0400
+
+    added class diagrams
+
+[33mcommit 1c918c9ede9d10122d650077e1772838ebd887eb[m
+Merge: 3afa3c0 4ae839d
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 02:48:09 2014 -0400
+
+    Merge branch 'master' of https://github.com/gamoholic010/DistributedSystems
+
+[33mcommit 3afa3c01e66b9332fe790d49c215973faa4285f5[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 00:53:18 2014 -0400
+
+    multi threaded server working
+
+[33mcommit 4ae839d4a5d2e895b7fc0caedee2ca475cf0b73f[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Fri May 30 00:53:18 2014 -0400
+
+    multi threaded server working
+
+[33mcommit 823d5b076aaf469fd082156d3988a186c11cf906[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Thu May 29 22:46:04 2014 -0400
+
+    client threads partial
+
+[33mcommit f723cfa35069b41ba8b33f7182f0f06e9c33436c[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Thu May 29 05:13:25 2014 -0400
+
+    client server communication working
+
+[33mcommit 349ad95a711cbdea65ed68d517e06cbe3933af88[m
+Merge: 09a5a9d f12a338
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Wed May 28 23:01:03 2014 -0400
+
+    Merge branch 'master' of https://github.com/gamoholic010/DistributedSystems
+
+[33mcommit 09a5a9d176803a14cde94fe2e77fd3879a9d16d2[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Wed May 28 22:21:18 2014 -0400
+
+    removed unnecessary files
+
+[33mcommit f12a33853f9e717dccaeec8fc266262c5bf78c37[m
+Author: gamoholic010 <gamoholic010@gmail.com>
+Date:   Wed May 28 22:26:27 2014 -0400
+
+    Create README.md
+
+[33mcommit f5cad18a18216686e85b7d7f634f06d120256b58[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Wed May 28 22:21:18 2014 -0400
+
+    removed unnecessary files
+
+[33mcommit 5c1b81afd6819daf5472e4be1125910b84826617[m
+Author: Amey Ghadigaonkar <gamoholic010@gmail.com>
+Date:   Wed May 28 22:10:16 2014 -0400
+
+    first commit

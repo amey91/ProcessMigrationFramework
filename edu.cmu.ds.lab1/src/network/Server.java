@@ -86,15 +86,21 @@ public class Server {
 					            		break; //break since we got a unique key					            	
 					            }
 					            
-					            /* TODO del
-					            System.out.println("Connected from " + clientSocket .getInetAddress() + " on port "
-					                    + clientSocket .getPort() + " to port " + clientSocket .getLocalPort() + " of "
-					                    + clientSocket .getLocalAddress());
-					            */
+					            // read initial message containing client side receiving port 
+							    // for other clients to contact this particular client 
+					            DataInputStream inputStream = new DataInputStream(clientSocket.getInputStream());
+							    String receiverPortInString = inputStream.readLine();
+							    String[] port = receiverPortInString.split(" ");
+							    if(!port[0].equalsIgnoreCase("MyReceiver")){
+							    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
+							    	System.exit(0);
+							    }
+							    int receiverPort = Integer.parseInt(port[1]);
 					            
+							    
 					            //once client connects, create a output stream at the socket
 					            Thread pp = new ClientHandler(clientSocket,key);
-					            Server.clients.put(key,new ClientInfo(key, pp,clientSocket));
+					            Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
 					            Server.displayClients();
 					            pp.start();
 					          
@@ -115,7 +121,7 @@ public class Server {
 		
 		System.out.println("\nTotal clients="+Server.clients.size());
 		for(int i : Server.clients.keySet())
-			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" port="+clients.get(i).location.socketNumber);
+			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort);
 	}
 	
 } // end of server class
@@ -127,12 +133,15 @@ class ClientInfo{
 	public Thread clientHandler;
 	public ArrayList processes;
 	public Location location;
+	public int clientsideReceiverPort;
+	public int receiverPort;
 	
-	ClientInfo(int id, Thread ch, Socket clientSocket){
+	ClientInfo(int id, Thread ch, Socket clientSocket, int receiverPort){
 		this.clientId = id;
 		this.clientHandler = ch;
 		this.processes = new ArrayList<Object>();
 		this.location = new Location(clientSocket.getInetAddress().toString(),clientSocket.getPort());
+		this.receiverPort = receiverPort;
 	}
 	
 	public String toString(){
@@ -157,9 +166,9 @@ class ClientHandler extends Thread{
 	public Socket clientSocket = null;
 	private int threadIdentifier;
 	
-	public ClientHandler(Socket clientSocket, int threadID) {
+	public ClientHandler(Socket clientSocket, int clientId) {
 	    this.clientSocket = clientSocket;
-	    this.threadIdentifier = threadID;
+	    this.threadIdentifier = clientId;
 	  }
 	  
 	@Override
@@ -168,7 +177,7 @@ class ClientHandler extends Thread{
 			//create streams for given socket
 			inputStream = new DataInputStream(clientSocket.getInputStream());
 		    printStream =  new PrintWriter(clientSocket.getOutputStream(), true);
-		    //tell server that it is ready
+		    
 		    
 		    while (true) {
 		        String line = inputStream.readLine();
