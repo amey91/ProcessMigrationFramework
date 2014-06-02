@@ -102,15 +102,26 @@ public class Server {
 							    	System.out.println("First Message is not not as excepted"+ receiverPortInString);
 							    	System.exit(0);
 							    }
-							    outputStream.flush();
+							    
 							    outputStream.println("YOURKEY "+key);
 							    
+							    // this is the receiver port for object communication from above
 							    int receiverPort = Integer.parseInt(port[1]);
 					            
 							    
 					            //once client connects, create a output stream at the socket
 					            Thread pp = new ClientHandler(clientSocket,key);
+					            
+					            
+					            // TODO
+					            //if yes, mark it as process manager in ClientInfo 
 					            Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
+					            //check if the imput is from process maanger
+					            if(port.length>2){
+					            	if(port[2].equalsIgnoreCase("processmanager")){
+					            		Server.clients.get(key).processManager=true;;
+					            	}
+					            }
 					            Server.displayClients();
 					            pp.start();
 					          
@@ -129,9 +140,15 @@ public class Server {
 	// displays all the clients connected to the server 
 	public static void displayClients(){
 		
-		System.out.println("\nTotal clients="+Server.clients.size());
+		
+		int managerCount=0;
 		for(int i : Server.clients.keySet())
-			System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).currenttimeInMillis);
+			if(!Server.clients.get(i).processManager)
+				System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).currenttimeInMillis);
+			else
+				managerCount++;
+		System.out.println("Total clients="+(Server.clients.size()-managerCount)+" and ProcessManagers="+managerCount);
+		System.out.println();
 	}
 	
 } // end of server class
@@ -162,7 +179,7 @@ class ClientHandler extends Thread{
 		        String line = inputStream.readLine();
 		        printStream.flush();
 		        String words[]=line.split(" ");
-		        System.out.println("Called by Client:"+ line);
+		        //System.out.println("Called by Client:"+ line);
 		        //check if message from ProcessManager
 		        if(words[0].equalsIgnoreCase("ProcessManager") && words.length>0){
 		        	switch(Integer.parseInt(words[1])){
@@ -230,21 +247,7 @@ class ReceiveHearBeats extends Thread{
 	}//end of run
 }// end of Receive Heart Beats 
 
-<<<<<<< HEAD
-=======
-		    int receiverPort = Integer.parseInt(port[1]);
-            //TODO implement client handler
-		    
-            //once client connects, create a output stream at the socket
-     //       Thread pp = new ClientHandler();
-     //       Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
-     //       Server.displayClients();
-     //       pp.start();
-		}//end of while
-		
-	}// end of run
 
->>>>>>> e19fe3ce7c622e8826650048588650c3811eb9b8
 
 class HandleHeartBeat extends Thread {
 	String hbMsg;

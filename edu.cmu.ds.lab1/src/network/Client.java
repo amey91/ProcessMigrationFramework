@@ -99,7 +99,7 @@ public class Client {
 	            	outToServer.println(userInput);
 	                System.out.println("echo: " + inFromServer.readLine());
 	            }
-	        
+	}
 	        /*
 	         *  Prepare to read message from server 
 	         * 

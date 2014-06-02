@@ -1,7 +1,7 @@
 package processmanager;
 
-import SlaveServer;
-import SlaveServiceException;
+//import SlaveServer;
+//import SlaveServiceException;
 
 import java.io.BufferedReader;
 import java.util.Scanner;
@@ -74,7 +74,13 @@ class ContactServer extends Thread {
             
             //take first input from server
             String firstInput = inFromServer.readLine();
-            
+            String[] clientKeyArray = firstInput.split(" ");
+            //if the first received message does not contain key, then exit
+            if(!clientKeyArray[0].equalsIgnoreCase("YOURKEY")||clientKeyArray.length<1){
+            	System.out.println("Client failed to receive key from server. This client is exiting.");
+            	System.out.println(firstInput);
+            	System.exit(-1);
+            }
             
             String reply;
             
@@ -85,8 +91,8 @@ class ContactServer extends Thread {
     			case(1): 
     				System.out.println("Process manager sending list request");
     				outToServer.println("ProcessManager "+StatusMessages.LIST_CLIENTS);
-                	reply = inFromServer.readLine();
-    				System.out.println("echo: Process manager received: " + reply);
+                	//reply = inFromServer.readLine();
+    				//System.out.println("echo: Process manager received: " + reply);
     				// set the message so that server knows it is process manager
     				// ProcessManager.messageCode = StatusMessages.LIST_PROCESSES;
     				// ProcessManager.messageContent = StatusMessages.LIST_PROCESSES+"";
@@ -112,7 +118,7 @@ class ContactServer extends Thread {
     			
     			case(4): break;
     			
-    			case(5): 
+   /* 			case(5): 
     			{
     				int clientID;
     				System.out.println("Launching new process");
@@ -131,8 +137,8 @@ class ContactServer extends Thread {
     				else {
     					System.out.println("Usage: java ProcessManager [-c <master hostname or ip>]");
     				}
-    			
-    				
+    			}
+    				break;
     			
     			default: break;
     			}
@@ -147,6 +153,10 @@ class ContactServer extends Thread {
             System.exit(1);
         }
 		
-	}
+	} */
 	
+    			}
+            }
+        }catch(Exception e){}
+	}
 }
