@@ -5,3 +5,10 @@
 /ClientInfo.class
 /StatusMessages.class
 /DecodeMessage.class
+/ClientsideReceiver.class
+/TestClient.class
+/TestObject.class
+/TestServer.class
+/ClientHeartbeat.class
+/HandleHeartBeat.class
+/ReceiveHearBeats.class

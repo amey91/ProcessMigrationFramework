@@ -1,5 +1,8 @@
 package processmanager;
 
+import SlaveServer;
+import SlaveServiceException;
+
 import java.io.BufferedReader;
 import java.util.Scanner;
 import java.io.IOException;
@@ -111,16 +114,32 @@ class ContactServer extends Thread {
     			
     			case(5): 
     			{
+    				int clientID;
+    				System.out.println("Launching new process");
+    				log("Enter clientID, processName, processTYPE to launch");
+    				clientID = sc.nextInt();
+    				outToServer.println("New Process started on Client" + clientID);
     				
-    			}
+    					try {
+    						client.launch(args[1]);
+    					} catch (SlaveServiceException e) {
+    						System.err.println("Slave Serivce Ended with Exception");
+    					}
+    					System.out.println("Slave Serivce Ended");
+    				}
+    				
+    				else {
+    					System.out.println("Usage: java ProcessManager [-c <master hostname or ip>]");
+    				}
+    			
     				
     			
     			default: break;
     			}
-    		}
-            /////////////////////
+    		
+        
             
-        } catch (UnknownHostException e) {
+        }catch (UnknownHostException e) {
             System.err.println("Unknown host " + hostName);
             System.exit(1);
         } catch (IOException e) {

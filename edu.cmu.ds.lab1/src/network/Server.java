@@ -230,6 +230,21 @@ class ReceiveHearBeats extends Thread{
 	}//end of run
 }// end of Receive Heart Beats 
 
+<<<<<<< HEAD
+=======
+		    int receiverPort = Integer.parseInt(port[1]);
+            //TODO implement client handler
+		    
+            //once client connects, create a output stream at the socket
+     //       Thread pp = new ClientHandler();
+     //       Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
+     //       Server.displayClients();
+     //       pp.start();
+		}//end of while
+		
+	}// end of run
+
+>>>>>>> e19fe3ce7c622e8826650048588650c3811eb9b8
 
 class HandleHeartBeat extends Thread {
 	String hbMsg;

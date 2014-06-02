@@ -100,7 +100,9 @@ public class Client {
 	                System.out.println("echo: " + inFromServer.readLine());
 	            }
 	        
-	        /* Prepare to read message from server */
+	        /*
+	         *  Prepare to read message from server 
+	         * 
 			String str = null;
 			String[] args = null;
 			while ((str = inFromServer.readLine()) != null) {
@@ -108,7 +110,6 @@ public class Client {
 
 				if (args[0].equals("launch"))
 					launch(args);
-				
 				//	 suspend a process given process ID 
 				else if (args[0].equalsIgnoreCase("suspend")) {
 
@@ -149,11 +150,12 @@ public class Client {
 					// remove the process from process list 
 					processMap.remove(migrateProcessID);
 				}
-
+                
 				
 				 /* resume a suspended process by reading from an *.obj file
 				 * previously dumped by another slave server
 				 */
+	            /*
 				else if (args[0].equals("resume")) {
 					//read the *.obj file 
 					FileInputStream inputFile = new FileInputStream(args[1]
@@ -199,12 +201,15 @@ public class Client {
 					outToServer.write("process list finish\n");
 					outToServer.flush();
 				}
-*/
-			}///
-		}
+
+
+			}
+		*/
+
+
 
 		/**
-		 * Instantiate a new object (running process)
+		 * Instantiate a new process
 		 * 
 		 * @param args
 		 */
