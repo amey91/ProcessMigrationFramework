@@ -13,3 +13,5 @@
 /HandleHeartBeat.class
 /ReceiveHearBeats.class
 /DeleteTimedoutClients.class
+/ProcessHashMap.class
+/ProcessInfo.class

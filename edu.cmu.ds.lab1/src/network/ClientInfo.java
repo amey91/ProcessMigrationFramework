@@ -58,7 +58,6 @@ public class ClientInfo {
 	}
 
 	public void launch(String[] input) {
-		// TODO Auto-generated method stub
 		Client.launch(input);
 	}
 }
