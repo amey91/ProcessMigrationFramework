@@ -34,7 +34,9 @@ public class Server {
 	// default port for initial communication
 	public static final int INITIAL_PORT = 2222;
 	// default port for heart beat
-	public static final int HEARTBEAT_PORT =3333; 
+	public static final int HEARTBEAT_PORT =3333;
+	// default port for heart beat
+	public static final int PROCESS_LIST_PORT =4444;
 	//default initial host name
 	public static String HOSTNAME = "127.0.0.1";
 	
@@ -75,6 +77,10 @@ public class Server {
 		// setup the hearbeat socket for the server that listens to clients 
 		ServerSocket serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
 		new Thread(new ReceiveHearBeats(serverSocket1)).start();
+		
+		// setup the hearbeat socket for the server that listens to clients 
+		ServerSocket serverSocket2 = new ServerSocket(Server.PROCESS_LIST_PORT);
+		new Thread(new ReceiveProcessList(serverSocket2)).start();
 	    
 		// setup the time out thread which looks intot he hashmap for timedout clients
 		// and deletes any which dont send heartbeats for more than 20 seconds
@@ -306,7 +312,6 @@ class DeleteTimedoutClients extends Thread {
 	
 	
 	public DeleteTimedoutClients(){
-		
 	}
 	
 	@Override
@@ -331,8 +336,7 @@ class DeleteTimedoutClients extends Thread {
 					if(currentTime - clientLastSeen > 20000 && Server.clients.get(i).processManager==true){
 						//process amanger has timed out
 						System.out.println("TIMEOUT: Process Manager with ID "+i+" timed-out and has been removed from records.");
-						Server.clients.remove(i); 
-						
+						Server.clients.remove(i); 				
 					}
 			}
 			
@@ -343,12 +347,80 @@ class DeleteTimedoutClients extends Thread {
 			} catch (InterruptedException e) {
 				// Auto-generated catch block
 				e.printStackTrace();
-			}
-			
-			
-		}
-		
-		
-		
+			}	
+		}	
 	}
 }
+
+
+
+//this class is responsible for updating the hashmap
+//and eliminating clients which have timed out
+class ReceiveProcessList extends Thread {
+	
+ServerSocket processListSocket;
+	
+	public ReceiveProcessList(ServerSocket s){
+		processListSocket = s;
+	}
+	
+	@Override
+	public void run(){
+		 
+		
+		while(true){
+            //accept a new client connection by listening to port
+			try {
+				
+				Socket clientSocket1 = processListSocket.accept();
+				// read heartbeat 
+				BufferedReader inputStream = new BufferedReader(new InputStreamReader(
+						clientSocket1.getInputStream()));
+				String receiverPortInString = inputStream.readLine();
+				HandleProcessList hhb = new HandleProcessList(receiverPortInString);
+				new Thread(hhb).start();
+				clientSocket1.close();
+			    
+			}catch (IOException e) {
+				// Auto-generated catch block
+				e.printStackTrace();
+				continue;
+			}    
+		} // end of while		
+	}//end of run
+}
+
+
+class HandleProcessList extends Thread {
+	String hbMsg;
+	
+	public HandleProcessList(String receiverPortInString) {
+		hbMsg = receiverPortInString;
+	}
+
+	@Override
+	public void run(){
+		//split input to receive client key
+		String[] keyArray = hbMsg.split(" ");
+		//extract client key
+	    if(!keyArray[0].equalsIgnoreCase("HEARTBEAT")||keyArray.length<2){
+	    	System.out.println("First Message is not not as excepted"+ hbMsg);
+	    	System.exit(0);
+	    }
+	    
+	    int clientKey = Integer.parseInt(keyArray[1]);
+        // implement client handler after updating client info
+	    if(!Server.clients.containsKey(clientKey)){
+	    	System.out.println("Client with key "+clientKey+" does not exist or has timed-out.");
+	    	System.exit(0);
+	    }
+	    else{
+	    	java.util.Date currentDate1 = new java.util.Date();
+	    	Server.clients.get(clientKey).lastSeen = currentDate1.getTime();
+	    }
+	    
+	}
+	
+	
+}// end of handle heart beats
+

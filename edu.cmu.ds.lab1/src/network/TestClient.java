@@ -20,14 +20,14 @@ import processmanager.MigratableProcess;
 
 public class TestClient {
 	public static void main(String args[]) throws Exception{
-		String[] arr = {"grepprocess","xyz","abc"};
+		String[] arr = {"grepprocess","C:/test.txt","C:/javastuff/output.txt"};
 		GrepProcess r = new GrepProcess(arr);
 		Thread rp = new Thread(r);
 		rp.start();
 		
 		String hostName = "localhost";
         int portNumber = Server.INITIAL_PORT;      
-        //Thread.sleep(1000);
+        Thread.sleep(2000);
         Socket echoSocket = new Socket(hostName, portNumber);
         //open print stream
         //PrintWriter outToServer = new PrintWriter(echoSocket.getOutputStream(), true);
@@ -39,11 +39,13 @@ public class TestClient {
         // store input
         
         ObjectOutputStream outObj = new ObjectOutputStream(echoSocket.getOutputStream());
-        Thread.sleep(3000);
+        //Thread.sleep(1000);
         r.suspend();
-        rp.stop();
+        //rp.stop();
+        rp=null;
         outObj.writeObject(r);
-        Thread.sleep(10000);
+        
+        Thread.sleep(1000);
         //Thread.sleep(1000);
         //System.out.println("Resume");
         //Field field = r.getClass().getDeclaredField("suspending");

@@ -4,6 +4,7 @@ package network;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -28,12 +29,28 @@ public class TestServer {
 			
 			            while(true){
 					            //accept a new client connection by listening to port
-					            Socket clientSocket = serverSocket.accept();    
+					            
+			            		Socket clientSocket = serverSocket.accept();    
 
 					            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
-					            MigratableProcess fff = (MigratableProcess)inobj.readObject();
+					            Runnable newObj = (Runnable)inobj.readObject();
+					            System.out.println("Object received");
 					            //fff.suspend();
-					            new Thread(fff).start();
+					            new Thread(newObj).start();
+					            try{
+					            	Field myField = Thread.class.getDeclaredField("target");
+					            	myField.setAccessible(true);
+					            	
+					            	
+					            	Field myNewField = newObj.getClass().getDeclaredField("suspending");
+					            	myNewField.setAccessible(true);
+					            	myNewField.setBoolean(newObj, false);
+					            	
+					            }catch(Exception e){
+					            	e.printStackTrace();
+					            }
+					            
+					            System.out.println("Object created.");
 					            //fff.run();
 							  
 					          

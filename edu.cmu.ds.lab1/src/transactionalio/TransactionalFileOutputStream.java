@@ -41,19 +41,22 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 	//@referred  to http://www.java-tips.org/java-se-tips/java.io/how-to-use-random-access-file.html
 	@Override
 	public void write(int arg0) throws IOException {
+		RandomAccessFile raf = null;
 		try{
 			System.out.println("OUTPUT CALLED");
-			RandomAccessFile raf = new RandomAccessFile(new File(fileName),"rw");
+			raf = new RandomAccessFile(new File(fileName),"rw");
 			raf.seek(offset);
 			raf.write(arg0);
-			offset = offset + 1;
-			raf.close();
+			offset = offset + 1 ;
 			
 		}catch(Exception e){
 			System.out.println("Transactional stream output error. Exiting. ");
 			e.printStackTrace();
 			System.exit(-1);
 			
+		}finally{
+			raf.close();
+			System.out.println("Transactional Output closed");
 		}
 		
 	}

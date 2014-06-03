@@ -45,17 +45,20 @@ public class GrepProcess implements MigratableProcess
 	public void run()
 	{
 		PrintStream out = new PrintStream(outFile);
+		//replace deprecated methods
 		BufferedReader br = new BufferedReader(new InputStreamReader(inFile));
 
 		try {
 			while (!suspending) {
 				String line = br.readLine();
-
-				if (line == null) break;
+				System.out.println("Line read :"+line);
+				Thread.sleep(400);
 				
-				if (line.contains(query)) {
+				if (line!=null && line.contains(query)) {
 					out.println(line);
 				}
+
+					if (line == null) break;
 				
 				// Make grep take longer so that we don't require extremely large files for interesting results
 				try {
@@ -68,6 +71,9 @@ public class GrepProcess implements MigratableProcess
 			//End of File
 		} catch (IOException e) {
 			System.out.println ("GrepProcess: Error: " + e);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 
 
@@ -77,6 +83,7 @@ public class GrepProcess implements MigratableProcess
 	public void suspend()
 	{
 		suspending = true;
+		System.out.println("Nonnative suspend");
 		while (suspending);
 	}
 
