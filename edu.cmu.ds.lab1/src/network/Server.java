@@ -1,5 +1,6 @@
 package network;
 
+
 /**
  * class derived from the official Java documentation available at:
  * http://docs.oracle.com/javase/tutorial/networking/sockets/examples/EchoServer.java
@@ -63,6 +64,7 @@ public class Server {
 	public static void main(String args[]) throws IOException{
 		int portNumber = Server.INITIAL_PORT;  
 		if (args.length != 1) {
+			System.err.println("Usage: java Server OR java Server <port>");
 	            System.err.println("No port specified. Using default port 2222");
 	        }
 		else
@@ -123,7 +125,7 @@ public class Server {
 					            // TODO
 					            //if yes, mark it as process manager in ClientInfo 
 					            Server.clients.put(key,new ClientInfo(key, pp,clientSocket,receiverPort));
-					            //check if the imput is from process maanger
+					            //check if the imput is from process manager
 					            if(port.length>2){
 					            	if(port[2].equalsIgnoreCase("processmanager")){
 					            		Server.clients.get(key).processManager=true;;

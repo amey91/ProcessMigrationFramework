@@ -1,11 +1,14 @@
 package network;
 
+
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+
+import processmanager.MigratableProcess;
 
 public class TestServer {
 	public static void main(String args[]) throws IOException{
@@ -28,8 +31,10 @@ public class TestServer {
 					            Socket clientSocket = serverSocket.accept();    
 
 					            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
-					            TestObject fff = (TestObject)inobj.readObject();
-					            fff.run();
+					            MigratableProcess fff = (MigratableProcess)inobj.readObject();
+					            //fff.suspend();
+					            new Thread(fff).start();
+					            //fff.run();
 							  
 					          
 			            }

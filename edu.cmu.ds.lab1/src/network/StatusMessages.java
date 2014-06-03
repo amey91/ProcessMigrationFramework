@@ -1,5 +1,6 @@
 package network;
 
+
 public class StatusMessages {
 	
 	public final static int END_MESSAGE = -1;

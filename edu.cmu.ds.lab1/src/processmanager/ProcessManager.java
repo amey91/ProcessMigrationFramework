@@ -29,11 +29,8 @@ public class ProcessManager {
 	public static void main(String args[]){
 		ContactServer.log("Console for Process Management.");
 		Thread contact = new Thread(new ContactServer());
-		contact.start();
-		
+		contact.start();	
 	}
-	
-
 
 }
 
@@ -110,7 +107,6 @@ class ContactServer extends Thread {
     				break;
     			
     			case(2): 
-    				
     				System.out.println("Process manager sending suspend request");
     				int pid;
     				log("Enter process id to be suspended");
@@ -124,7 +120,11 @@ class ContactServer extends Thread {
 	            	}
     				break;
     			
-    			case(3): break;
+    			case(3):
+    				System.out.println("Available processes are: "); // TODO
+    				System.out.print("Enter the ID of the process to be deleted: ");
+    				break;
+    			
     			
     			case(4): break;
     			

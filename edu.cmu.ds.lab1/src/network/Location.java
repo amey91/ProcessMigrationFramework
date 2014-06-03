@@ -1,5 +1,6 @@
 package network;
 
+
 public class Location {
 	public String ipAddress;
 	public int socketNumber;

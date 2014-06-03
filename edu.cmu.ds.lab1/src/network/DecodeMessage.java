@@ -1,5 +1,6 @@
 package network;
 
+
 public class DecodeMessage {
 	
 	/* @params - args[] which is an array of strings

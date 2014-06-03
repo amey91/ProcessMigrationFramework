@@ -8,9 +8,6 @@ public interface MigratableProcess extends Runnable, Serializable{
 	public final String DEFAULT_PROCESS_NAME = "Process name not assigned"; 
 	public String processName = DEFAULT_PROCESS_NAME;
 	
-	// launch a new 
-	public void launch();
-	
 	//must be called before object is serialized
 	// so that it can enter known safe state
 	public void suspend(); 

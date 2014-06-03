@@ -1,5 +1,7 @@
 package grepprocess;
 
+
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.EOFException;
 import java.io.DataInputStream;
@@ -18,6 +20,7 @@ public class GrepProcess implements MigratableProcess
 	private TransactionalFileInputStream  inFile;
 	private TransactionalFileOutputStream outFile;
 	private String query;
+	public  int intCount=0;
 
 	private volatile boolean suspending;
 
@@ -25,22 +28,28 @@ public class GrepProcess implements MigratableProcess
 	{
 		if (args.length != 3) {
 			System.out.println("usage: GrepProcess <queryString> <inputFile> <outputFile>");
-			throw new Exception("Invalid Arguments");
+			//throw new Exception("Invalid Arguments");
 		}
+		
 		query = args[0];
 		inFile = new TransactionalFileInputStream(args[1]);
+		
+		//we assume that this implmentation is same to the FileoutStream implementation
+		// which takes a boolean for an append option
+		// @param - true implies file will be written from the end
+		// @param - false implies file will be written from the beginning 
 		outFile = new TransactionalFileOutputStream(args[2], false);
 	}
+
 
 	public void run()
 	{
 		PrintStream out = new PrintStream(outFile);
-		DataInputStream in = new DataInputStream(inFile);
+		BufferedReader br = new BufferedReader(new InputStreamReader(inFile));
 
 		try {
 			while (!suspending) {
-				@SuppressWarnings("deprecation")
-				String line = in.readLine();
+				String line = br.readLine();
 
 				if (line == null) break;
 				
@@ -63,18 +72,12 @@ public class GrepProcess implements MigratableProcess
 
 
 		suspending = false;
-	}
+	}//end of run
 
 	public void suspend()
 	{
 		suspending = true;
 		while (suspending);
-	}
-
-	@Override
-	public void launch() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -88,7 +91,10 @@ public class GrepProcess implements MigratableProcess
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
 
+	
 	@Override
 	public String toString(String[] paramArray) {
 		// TODO Auto-generated method stub

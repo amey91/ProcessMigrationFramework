@@ -1,5 +1,6 @@
 package network;
 
+
 /**
  * class derived from the official Java documentation available at:
  * http://docs.oracle.com/javase/tutorial/networking/sockets/examples/EchoClient.java
@@ -27,16 +28,16 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.io.Serializable;
 
 import processmanager.MigratableProcess;
-import processmanager.ProcessInfo;
-import processmanager.ProcessStatus;
 
 public class Client {
 	public Location location;
 	public static int clientKey = -1;
 	private static HashMap<Integer, ProcessInfo> processMap = new HashMap<Integer, ProcessInfo>();
 	private static int processID = 0;
+	public static ProcessHashMap processes;
 	
 	public int getSocketNumber(){
 		return location.socketNumber;
@@ -44,9 +45,15 @@ public class Client {
 	
 	public int receiverPort = 6666;
 	
-	public static void main(String ags[])
-			throws UnknownHostException, IOException, ClassNotFoundException{
-		 
+	public static void main(String args[]) throws UnknownHostException, IOException, ClassNotFoundException{
+		//check input
+		if (args.length != 0) {
+	        System.err.println("FAILURE. Usage: java Client");
+	        System.err.println("Exiting");
+	        System.exit(0);
+	    }
+		//for storing all the rpocesses at this client 
+		processes = new ProcessHashMap();
 				/* Try to connect to server */
 		        String hostName = Server.HOSTNAME;
 		        int portNumber = Server.INITIAL_PORT;
@@ -98,7 +105,8 @@ public class Client {
 	            	outToServer.println(userInput);
 	                System.out.println("echo: " + inFromServer.readLine());
 	            }
-	}
+	}//end fo main
+	
 	        /*
 	         *  Prepare to read message from server 
 	         * 
@@ -254,8 +262,8 @@ public class Client {
 
 			/* add this newly started process to the process list */
 			ProcessInfo processInfo = new ProcessInfo();
-			processInfo.process = newProcess;
-			processInfo.status = ProcessStatus.RUNNING;
+			//processInfo.process = newProcess; TODO
+			//processInfo.status = ProcessStatus.RUNNING;
 			processID++;
 			processMap.put(processID, processInfo);
 		}
@@ -339,3 +347,4 @@ class ClientHeartbeat extends Thread{
 
 	}
 }
+
