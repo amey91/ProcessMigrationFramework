@@ -2,12 +2,17 @@ package processmanager;
 
 public class test {
 	public static void main(String[] args) throws InterruptedException{
-		Thread tnew= new Tthread();
+		String processInform = "grepprocess.GrepProcess of C:/input.txt C:/output/output3.txt";
+		System.out.println(processInform.substring(0,processInform.indexOf(' '))); // "72"
+		System.out.println( processInform.substring(processInform.indexOf(' ')+1)); // "tocirah sneab"
+		
+		/*Thread tnew= new Tthread();
 		tnew.start();
 		Thread.sleep(10000);
 		tnew.suspend();
 		try{tnew.start();}
 		catch(Exception e){System.out.println("Suspended process cannot start again!");e.printStackTrace();}
+		*/
 	}
 
 }

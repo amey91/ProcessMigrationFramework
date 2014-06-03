@@ -12,15 +12,18 @@ package network;
 
 import java.lang.Runnable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.lang. Class;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -29,6 +32,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.Runnable;
+import java.lang.reflect.Constructor;
+
+import processmanager.MigratableProcess;
+
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 public class Server {
 	// default port for initial communication
@@ -63,6 +71,11 @@ public class Server {
 		return 123456 + rand.nextInt(65321);
 	}
 
+	//UI function
+	public static void log(String a){
+		System.out.println(a);
+	}
+	
 	public static void main(String args[]) throws IOException{
 		int portNumber = Server.INITIAL_PORT;  
 		if (args.length != 1) {
@@ -84,8 +97,14 @@ public class Server {
 	    
 		// setup the time out thread which looks intot he hashmap for timedout clients
 		// and deletes any which dont send heartbeats for more than 20 seconds
+		log("Setting up timeout thread for clients..");
 		Thread tot = new Thread(new DeleteTimedoutClients());
 		tot.start();
+		
+		//setup the User console
+		log("Setting up the Process manager console...");
+		Thread console = new Thread(new ProcessManager());
+		console.start();
 		
 		
 			        try {
@@ -325,7 +344,7 @@ class DeleteTimedoutClients extends Thread {
 				java.util.Date currentDate = new java.util.Date();
 				long currentTime = currentDate.getTime();
 				long clientLastSeen = Server.clients.get(i).lastSeen;
-				System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));
+				//System.out.println("TIMEOUT last seen for ID "+i+" : "+ (currentTime - clientLastSeen));
 				//check for timeout
 				if(currentTime - clientLastSeen > 20000 && Server.clients.get(i).processManager==false){
 					// the client process has timed out. 
@@ -422,5 +441,136 @@ class HandleProcessList extends Thread {
 	}
 	
 	
-}// end of handle heart beats
+}// end of handle process list
+
+
+//this thread is the userconsole
+class ProcessManager extends Thread{
+	
+	public void log(String a){
+		System.out.println(a);
+	}
+	
+	@Override
+	public void run(){
+		//initial setup
+		BufferedReader br = new BufferedReader( new InputStreamReader(System.in));
+		int choice; //choice for user input
+		int processId; //process id for user input
+		int clientId; //client id for user input
+		String processName;
+		Socket clientSocket = null;
+		String processInform;
+		String processCmd;
+		
+		//for infinity
+		while(true){
+			
+			try{
+				
+				log("Press: 1.List Clients 2. List Processes 3.Remove Process 4.Migrate Process: 5.Launch Process");
+				choice = Integer.parseInt((br.readLine()));
+				switch(choice){
+				case(1): 
+					System.out.println("Display Clients called by Process Manager:");
+					Server.displayClients();
+					break;
+				
+				case(2): 
+					
+					// TODO processmap
+					log("Available processes are: "); // TODO
+					log("Enter the ID of the process to be deleted: ");
+					break;
+					
+	            	
+					
+					
+				
+				case(3):
+					log("Enter process id to be removed");
+					processId= Integer.parseInt(br.readLine());
+					System.out.println("Process manager sending suspend request");
+					// TODO remove a process	
+					break;
+				
+				
+				case(4): 
+					log("Enter process to be migrated");
+				
+					// TODO
+					break;
+				
+				case(5):
+					log("Enter client ID where process is to be started:");
+					clientId=Integer.parseInt(br.readLine());
+					if(!Server.clients.containsKey(clientId)){
+						log("No such client found");
+						break;
+					}
+					log(" Enter the name of the process to be launched (CaseSensitive) along with its arguments: ");
+					System.out.println("(Example: GrepProcess <queryString> <input.txt> <output.txt>)");
+					
+					
+					processInform = br.readLine();
+					
+					// @referred http://stackoverflow.com/questions/10272773/split-string-on-the-first-white-space-occurence
+					processName = processInform.substring(0,processInform.indexOf(" ")); // "72"
+					processCmd = processInform.substring(processInform.indexOf(" ")+1); // "tocirah sneab"
+					String[] processArgs = processCmd.split(" ");
+					
+					// @referred http://stackoverflow.com/questions/3663944/what-is-the-best-way-to-remove-the-first-element-from-an-array
+					// if array has any arguments
+
+					
+					//@referred to http://stackoverflow.com/questions/9886266/is-there-a-way-to-instantiate-a-class-by-name-in-java
+					Class<?> userClass = Class.forName(processName);
+					Constructor<?> constructorNew = userClass.getConstructor(String[].class);
+					MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)processArgs);
+					
+
+					try{
+						String ip= Server.clients.get(clientId).location.ipAddress;
+							clientSocket = new Socket(ip.substring(1, ip.length()-1),Server.clients.get(clientId).receiverPort);
+							break;
+					} catch(Exception e){
+						log("Failure to connect to client");	
+						e.printStackTrace();
+						
+					}
+					//new Thread(instance).start(); //dont start the process at the server!
+					 ObjectOutputStream outObj = new ObjectOutputStream(clientSocket.getOutputStream());
+					 outObj.writeObject(instance);
+					 Thread.sleep(200);
+					 outObj = null;
+					 break;
+					
+				default: break;
+				
+				}//end of switch
+					
+				
+			}catch(Exception e){
+				log("something went wrong. Restarting ProcessManager. Refer error message below:");
+				e.printStackTrace();
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				continue;
+				
+			}//end of main try
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}//end of while
+		
+	}//end fo run
+	
+}
 

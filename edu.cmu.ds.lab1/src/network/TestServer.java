@@ -37,7 +37,7 @@ public class TestServer {
 					            System.out.println("Object received");
 					            //fff.suspend();
 					            new Thread(newObj).start();
-					            try{
+					            /*try{
 					            	Field myField = Thread.class.getDeclaredField("target");
 					            	myField.setAccessible(true);
 					            	
@@ -48,7 +48,7 @@ public class TestServer {
 					            	
 					            }catch(Exception e){
 					            	e.printStackTrace();
-					            }
+					            }*/
 					            
 					            System.out.println("Object created.");
 					            //fff.run();

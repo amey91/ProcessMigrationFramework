@@ -288,8 +288,11 @@ class ClientsideReceiver extends Thread{
 
 			            //accept a new client connection by listening to port
 			            Socket clientSocket = receiverSocket.accept();    
-			            // TODO implement handling of serialized object
-	
+			            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
+			            Runnable newObj = (Runnable)inobj.readObject();
+			            System.out.println("Object received. Starting at client ");
+			            //fff.suspend();
+			            new Thread(newObj).start();
 	            }
 
 		} catch(IOException e){
@@ -300,6 +303,8 @@ class ClientsideReceiver extends Thread{
 				e1.printStackTrace();
 			}
 			System.out.println("Thread ended for client");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 			
 	}// end of ClientsideReceiver run
