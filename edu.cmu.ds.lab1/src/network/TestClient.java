@@ -39,16 +39,16 @@ public class TestClient {
 		Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 		MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)arrv);
 		Thread pp = new Thread(instance);
-		pp.start();
+		//pp.start();  //comment this to launch
 		
 		String hostName = "localhost";
         int portNumber = Server.INITIAL_PORT;      
-        Thread.sleep(2000);
+        //Thread.sleep(2000); //comment this to launch and uncomment to migrate
         Socket echoSocket = new Socket(hostName, portNumber);
 
         ObjectOutputStream outObj = new ObjectOutputStream(echoSocket.getOutputStream());
-        Thread.sleep(1000);
-        instance.suspend();
+        //Thread.sleep(1000); //comment this to launch and uncomment to migrate
+        //instance.suspend(); //comment this to launch and uncomment to migrate
         //delete process from here once 
         pp=null;
         outObj.writeObject(instance);

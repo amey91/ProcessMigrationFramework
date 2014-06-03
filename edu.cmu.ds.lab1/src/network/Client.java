@@ -283,10 +283,12 @@ class ClientsideReceiver extends Thread{
 	@Override
 	public void run(){
 		try{
+			System.out.println("Client side receiver started on port .."+receiverSocket.getLocalPort());
 			//start to receive connections from other clients
 		    while (true) {
 
 			            //accept a new client connection by listening to port
+		    			System.out.println("Waiting for client");
 			            Socket clientSocket = receiverSocket.accept();    
 			            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
 			            Runnable newObj = (Runnable)inobj.readObject();
