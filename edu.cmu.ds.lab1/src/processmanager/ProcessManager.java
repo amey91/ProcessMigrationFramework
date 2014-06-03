@@ -8,9 +8,12 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import com.sun.xml.internal.fastinfoset.util.StringArray;
 
 import network.Client;
 import network.Server;
@@ -128,24 +131,19 @@ class ContactServer extends Thread {
     			
     			case(4): break;
     			
-    			case(5): 
-    			{
-    				int clientID;
-    				clientID = sc.nextInt();
-    				System.out.println("Launching new Process");
-    				log("Enter clientID, processName, processTYPE to launch");
-    				String[] input = null;
-    				input[0]= sc.next();
-    				input[1]= sc.next();
+    			case(5):
+    				log(" The available clients are: ");
+    				Server.displayClients();
+    				log("The available processes are: ");
+    				// TODO Server.displayProcesses();
     				
-    				log("New process launched");
+    				//@referred to http://stackoverflow.com/questions/9886266/is-there-a-way-to-instantiate-a-class-by-name-in-java
+    				Class<?> userClass = Class.forName("GrepProcess");
+    				Constructor<?> constructorNew = userClass.getConstructor(StringArray.class);
+    				Object instance = constructorNew.newInstance();
     				
-    				outToServer.println("ProcessManager " +StatusMessages.LAUNCH+clientID + input[0] + input[1] );
-    					
-    						Server.clients.get(clientID).launch(input);
-    					
-    						break;
-    			}
+    				break;
+    			
     			default: break;
     			}
             }
