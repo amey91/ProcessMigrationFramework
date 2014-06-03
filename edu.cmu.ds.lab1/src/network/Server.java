@@ -156,7 +156,7 @@ public class Server {
 					            		Server.clients.get(key).processManager=true;;
 					            	}
 					            }
-					            Server.displayClients();
+					            //Server.displayClients();
 					            pp.start();
 			            }
 			            

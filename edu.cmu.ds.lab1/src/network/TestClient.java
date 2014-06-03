@@ -43,12 +43,12 @@ public class TestClient {
 		
 		String hostName = "localhost";
         int portNumber = Server.INITIAL_PORT;      
-        //Thread.sleep(2000);
+        Thread.sleep(2000);
         Socket echoSocket = new Socket(hostName, portNumber);
 
         ObjectOutputStream outObj = new ObjectOutputStream(echoSocket.getOutputStream());
-        //Thread.sleep(1000);
-        //instance.suspend();
+        Thread.sleep(1000);
+        instance.suspend();
         //delete process from here once 
         pp=null;
         outObj.writeObject(instance);
