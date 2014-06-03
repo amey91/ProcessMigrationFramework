@@ -21,8 +21,10 @@ import processmanager.MigratableProcess;
 
 public class TestClient {
 	public static void main(String args[]) throws Exception{
-		//String[] arrv = {"of","C:/test.txt","C:/javastuff/output.txt"};
-		String processInform = "GrepProcess of C:\input.txt C:\output\output.txt";
+		/*
+		//
+		String processInform = "GrepProcess of C:\\input.txt C:\\output\\output.txt";
+		System.out.println(processInform);
 //		processInform.replaceFirst(regex, replacement)
 		System.out.println(processInform.substring(0,processInform.indexOf(' '))); // "72"
 		String [] ok = processInform.substring(processInform.indexOf(' ')+1).split(" "); // "tocirah sneab"
@@ -31,11 +33,11 @@ public class TestClient {
 		Thread rp = new Thread(r);
 		rp.start();
 		*/
-		
+		String[] arrv = {"of","C:/test.txt","C:/javastuff/output.txt"};
 		// @referred to http://stackoverflow.com/questions/2126714/java-get-all-variable-names-in-a-class
-		Class<?> userClass = Class.forName(processInform.substring(0,processInform.indexOf(' ')));
+		Class<?> userClass = Class.forName("GrepProcess");
 		Constructor<?> constructorNew = userClass.getConstructor(String[].class);
-		MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)ok);
+		MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)arrv);
 		Thread pp = new Thread(instance);
 		pp.start();
 		
