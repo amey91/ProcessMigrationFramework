@@ -56,7 +56,7 @@ public class TransactionalFileOutputStream extends OutputStream implements Seria
 		}catch(Exception e){
 			System.out.println("Transactional stream output error. Exiting. ");
 			e.printStackTrace();
-			System.exit(-1);
+			
 			
 		}finally{
 			raf.close();

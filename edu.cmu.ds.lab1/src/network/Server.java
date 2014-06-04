@@ -526,7 +526,7 @@ class ProcessManager extends Thread{
 
 					
 					//@referred to http://stackoverflow.com/questions/9886266/is-there-a-way-to-instantiate-a-class-by-name-in-java
-					Class<?> userClass = Class.forName("GrepProcess");
+					Class<?> userClass = Class.forName(processName);
 					Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 					MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)processArgs);
 					
@@ -536,16 +536,19 @@ class ProcessManager extends Thread{
 						System.out.println("contacting client on socket  "+ Server.clients.get(clientId).receiverPort);
 						System.out.println("contacting client on socket  "+ ip.substring(1, ip.length()));
 							clientSocket = new Socket(ip.substring(1, ip.length()),Server.clients.get(clientId).receiverPort);
-							break;
+							//break;
 					} catch(Exception e){
 						log("Failure to connect to client");	
 						e.printStackTrace();
 						
 					}
-					
+					//Server.clients.get(clientId).launch(processArgs);
 					//new Thread(instance).start(); //dont start the process at the server!
 					 ObjectOutputStream outObj = new ObjectOutputStream(clientSocket.getOutputStream());
 					 outObj.writeObject(instance);
+					 
+					 
+					 
 					 Thread.sleep(200);
 					 outObj = null;
 					 break;

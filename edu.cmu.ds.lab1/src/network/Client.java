@@ -221,6 +221,7 @@ public class Client {
 		 * @param args
 		 */
 		public static void launch(String[] args) {
+			System.out.println("launching new Process");
 			MigratableProcess newProcess = null;
 			try {
 				Class<MigratableProcess> processClass = (Class<MigratableProcess>) Class.forName(args[1]);
@@ -266,6 +267,7 @@ public class Client {
 			//processInfo.status = ProcessStatus.RUNNING;
 			processID++;
 			processMap.put(processID, processInfo);
+			System.out.println("New Process Launched");
 		}
 
 }
