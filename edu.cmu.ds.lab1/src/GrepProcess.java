@@ -45,7 +45,8 @@ public class GrepProcess implements MigratableProcess
 				String line = in.readLine();
 				System.out.println(line+"+READ");
 				if (line == null) {
-				  System.exit(1);
+				  
+				  break;
 				}
 				
 				if (line.contains(query)) {

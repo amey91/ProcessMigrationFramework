@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
@@ -535,8 +536,12 @@ class ProcessManager extends Thread{
 						String ip= Server.clients.get(clientId).location.ipAddress;
 						System.out.println("contacting client on socket  "+ Server.clients.get(clientId).receiverPort);
 						System.out.println("contacting client on socket  "+ ip.substring(1, ip.length()));
-							clientSocket = new Socket(ip.substring(1, ip.length()),Server.clients.get(clientId).receiverPort);
-							//break;
+
+
+						//return inetaddress from string
+						System.out.println((String)ip.substring(1, ip.length()));
+						clientSocket = new Socket(InetAddress.getByName((String)ip.substring(1, ip.length())),Server.clients.get(clientId).receiverPort);
+						
 					} catch(Exception e){
 						log("Failure to connect to client");	
 						e.printStackTrace();
