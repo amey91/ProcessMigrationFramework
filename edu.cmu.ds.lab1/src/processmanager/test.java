@@ -5,6 +5,18 @@ public class test {
 		String processInform = "grepprocess.GrepProcess of C:/input.txt C:/output/output3.txt";
 		System.out.println(processInform.substring(0,processInform.indexOf(' '))); // "72"
 		System.out.println( processInform.substring(processInform.indexOf(' ')+1)); // "tocirah sneab"
+		System.out.println("New ");
+		String[] yo =processInform.split(" ");
+		String result = "";
+		String[] finalS = new String[yo.length-1];
+		for(int i = 1; i<yo.length;i++){
+			finalS[i-1]=yo[i];
+		}
+		System.out.println(yo[0]+"!");
+		for(int i = 0; i<finalS.length;i++){
+			System.out.println(finalS[i]);
+		}
+		
 		
 		/*Thread tnew= new Tthread();
 		tnew.start();
