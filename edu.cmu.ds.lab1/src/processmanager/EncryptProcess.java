@@ -9,7 +9,7 @@ import transactionalio.TransactionalFileInputStream;
 import transactionalio.TransactionalFileOutputStream;
 
 
-public class EncryptProcess implements MigratableProcess {
+public class EncryptProcess extends MigratableProcess {
 
 	/**
 	 * 
@@ -131,12 +131,6 @@ public class EncryptProcess implements MigratableProcess {
 	public void remove() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public String toString(String[] paramArray) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
