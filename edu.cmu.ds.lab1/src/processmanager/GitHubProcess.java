@@ -15,8 +15,6 @@ import org.eclipse.egit.github.core.service.RepositoryService;
 import org.eclipse.egit.github.core.service.UserService;
 
 
-import edu.cmu.cs.cs214.hw5.framework.Post;
-import edu.cmu.cs.cs214.hw5.framework.User;
 
 /**
  * GitHubDataPlugin is a DataPlugin for GitHub. Users are GitHub users, and
@@ -53,7 +51,7 @@ public class GitHubProcess implements MigratableProcess {
         }
         service = new UserService(client);
     }
-
+/*
     @Override
     public User getUserByUserName(String name) throws FrameworkException {
         try {
@@ -226,7 +224,7 @@ public class GitHubProcess implements MigratableProcess {
     public String getName() {
         return NAME;
     }
-
+*/
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub

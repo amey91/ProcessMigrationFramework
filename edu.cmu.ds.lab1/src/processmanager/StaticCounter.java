@@ -22,10 +22,24 @@ public class StaticCounter implements MigratableProcess{
 			throw new Exception("Invalid Arguments");
 		}
 		
-		query = args[0];
-		interval = Integer.parseInt(args[1]);
+
 	}
 	
+	public void run() {
+		// TODO Auto-generated method stub
+		while (!suspending) {
+			 System.out.println(counter);
+			 try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			    counter++;
+		}
+		suspending = false;
+	}
+	/*
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -52,8 +66,9 @@ public class StaticCounter implements MigratableProcess{
 		      //timer.cancel(); //Not necessary because we call System.exit
 		      System.exit(0); //Stops the AWT thread (and everything else)
 		    }
-	  }
-	
+
+	*/
+
 	@Override
 	public void suspend() {
 		suspending = true;
