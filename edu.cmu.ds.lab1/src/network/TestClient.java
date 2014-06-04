@@ -33,22 +33,22 @@ public class TestClient {
 		Thread rp = new Thread(r);
 		rp.start();
 		*/
-		String[] arrv = {"of","C:/test.txt","C:/javastuff/output.txt"};
+		String[] arrv = {"decrypt","C:/javastuff/output.txt","C:/output/output.txt"};
 		// @referred to http://stackoverflow.com/questions/2126714/java-get-all-variable-names-in-a-class
-		Class<?> userClass = Class.forName("GrepProcess");
+		Class<?> userClass = Class.forName("processmanager.EncryptProcess");
 		Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 		MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)arrv);
 		Thread pp = new Thread(instance);
-		//pp.start();  //comment this to launch
+		pp.start();  //comment this to launch
 		
 		String hostName = "localhost";
         int portNumber = Server.INITIAL_PORT;      
-        //Thread.sleep(2000); //comment this to launch and uncomment to migrate
+        Thread.sleep(2000); //comment this to launch and uncomment to migrate
         Socket echoSocket = new Socket(hostName, portNumber);
 
         ObjectOutputStream outObj = new ObjectOutputStream(echoSocket.getOutputStream());
-        //Thread.sleep(1000); //comment this to launch and uncomment to migrate
-        //instance.suspend(); //comment this to launch and uncomment to migrate
+        Thread.sleep(1000); //comment this to launch and uncomment to migrate
+        instance.suspend(); //comment this to launch and uncomment to migrate
         //delete process from here once 
         pp=null;
         outObj.writeObject(instance);
