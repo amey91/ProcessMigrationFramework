@@ -538,10 +538,9 @@ class ProcessManager extends Thread{
 						System.out.println("contacting client on socket  "+ ip.substring(1, ip.length()));
 
 						//return inetaddress from string
+						System.out.println((String)ip.substring(1, ip.length()));
+						clientSocket = new Socket(InetAddress.getByName((String)ip.substring(1, ip.length())),Server.clients.get(clientId).receiverPort);
 						
-						clientSocket = new Socket(InetAddress.getByName((String)ip.substring(1, ip.length())),Server.clients.get(clientId).clientsideReceiverPort);
-
-							break;
 					} catch(Exception e){
 						log("Failure to connect to client");	
 						e.printStackTrace();

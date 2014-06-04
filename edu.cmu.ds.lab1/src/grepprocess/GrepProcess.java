@@ -20,6 +20,7 @@ public class GrepProcess implements MigratableProcess
 	private String query;
 	public int i = 0;
 	private volatile boolean suspending;
+	String[] passedArgs;
 
 	public GrepProcess(String args[]) throws Exception
 	{
@@ -28,7 +29,7 @@ public class GrepProcess implements MigratableProcess
 			System.out.println("usage: GrepProcess <queryString> <inputFile> <outputFile>");
 			throw new Exception("Invalid Arguments");
 		}
-		
+		passedArgs=args;
 		query = args[0];
 		inFile = new TransactionalFileInputStream(args[1]);
 		outFile = new TransactionalFileOutputStream(args[2], false);
@@ -91,8 +92,7 @@ public class GrepProcess implements MigratableProcess
 
 	@Override
 	public String toString(String[] paramArray) {
-		// TODO Auto-generated method stub
-		return null;
+		return "Instance of class "+this.getClass()+" created with arguments: "+this.passedArgs.toString();
 	}
 
 }
