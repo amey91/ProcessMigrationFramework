@@ -33,7 +33,7 @@ public class TestServer {
 			            		Socket clientSocket = serverSocket.accept();    
 
 					            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
-					            Runnable newObj = (Runnable)inobj.readObject();
+					            MigratableProcess newObj = (MigratableProcess)inobj.readObject();
 					            System.out.println("Object received");
 					            //fff.suspend();
 					            new Thread(newObj).start();

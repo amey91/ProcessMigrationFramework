@@ -37,15 +37,25 @@ import processmanager.MigratableProcess;
 public class Client {
 	public Location location;
 	public static int clientKey = -1;
-	public static ClientProcessMap processes;
+	//public static ClientProcessMap processes;
 	private static int processID = 0;
-	public static ConcurrentHashMap<String, String> processList;
+	public static ConcurrentHashMap<String, MigratableProcess> processes;
 	
 	public int getSocketNumber(){
 		return location.socketNumber;
 	}
 	
 	public int receiverPort = 6666;
+	
+	//method to display all processese running on this client
+	public static void displayProcesses(){
+		System.out.println("Processes running on client "+Client.clientKey+" are as follows:" );
+		for(String key: processes.keySet()){
+			System.out.print(processes.get(key).getName()+" ");
+		}
+		System.out.println();
+	}
+	
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, ClassNotFoundException{
 		//check input
@@ -89,7 +99,8 @@ public class Client {
 	            	System.exit(-1);
 	            }
 	            System.out.println("Connection established. This client's ID is "+Integer.parseInt(clientKeyArray[1]));
-	            processes = new ClientProcessMap(Integer.parseInt(clientKeyArray[1]));
+	            Client.clientKey = Integer.parseInt(clientKeyArray[1]);
+	            processes = new ConcurrentHashMap<String,MigratableProcess>();
 	            
 	            try{
 	            // create a new client hearbeat thread for this client
@@ -135,15 +146,16 @@ class ClientsideReceiver extends Thread{
 		    			System.out.println("Waiting for client");
 			            Socket clientSocket = receiverSocket.accept();    
 			            ObjectInputStream inobj = new ObjectInputStream(clientSocket.getInputStream());
-			            Runnable newObj = (Runnable)inobj.readObject();
+			            MigratableProcess newObj = (MigratableProcess)inobj.readObject();
 			            System.out.println("Object received. Starting at client ");
 			            //fff.suspend();
 			            
 			            Thread t = new Thread(newObj);
 			            System.out.println("Thread Id for thread is: "+ t.getId());
 			            //t.getId();
-			            Client.processes.processList.put(t.getId(), t);
+			            Client.processes.put(newObj.getName(), newObj);
 			            t.start();
+			            Client.displayProcesses();
 	            }
 
 		} catch(IOException e){
@@ -187,7 +199,10 @@ class ClientHeartbeat extends Thread{
 		        //BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
 		        //heartbeatSocket.getInputStream()));
 		        outToServer.println("HEARTBEAT "+ clientKey);
-				System.out.println("SENT = HEARTBEAT "+ clientKey);
+				System.out.println("SENT = HEARTBEAT "+ clientKey +" Now sending process map..");
+				outToServer.println(Client.processes);
+				//include a safe time buffer
+				Thread.sleep(30);
 				heartbeatSocket.close();
 				try {
 					Thread.sleep(2000);
@@ -212,12 +227,12 @@ class ClientProcessMap implements java.io.Serializable{
 	private static final long serialVersionUID = -6942022907249520529L;
 	
 	public int clientKey;
-	public ConcurrentHashMap<Long, Runnable> processList;
+	public ConcurrentHashMap<String, Runnable> processList;
 	
 	
 	public ClientProcessMap(int c){
 		clientKey = c;
-		processList = new ConcurrentHashMap<Long, Runnable>();
+		processList = new ConcurrentHashMap<String, Runnable>();
 	}
 	
 	

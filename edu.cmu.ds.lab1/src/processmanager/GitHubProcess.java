@@ -249,9 +249,4 @@ public class GitHubProcess extends MigratableProcess {
 		
 	}
 
-	@Override
-	public String toString(String[] paramArray) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

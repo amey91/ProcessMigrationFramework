@@ -90,9 +90,5 @@ public class GrepProcess extends MigratableProcess
 		
 	}
 
-	@Override
-	public String toString(String[] paramArray) {
-		return "Instance of class "+this.getClass()+" created with arguments: "+this.passedArgs.toString();
-	}
 
 }

@@ -91,10 +91,6 @@ public class GrepProcess extends MigratableProcess
 		
 	}
 
-	@Override
-	public String toString(String[] paramArray) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }
