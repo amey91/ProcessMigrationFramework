@@ -52,7 +52,7 @@ public class StaticCounter implements MigratableProcess{
 		      //timer.cancel(); //Not necessary because we call System.exit
 		      System.exit(0); //Stops the AWT thread (and everything else)
 		    }
-		  }
+	  }
 	
 	@Override
 	public void suspend() {

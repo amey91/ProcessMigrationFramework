@@ -37,7 +37,7 @@ import processmanager.MigratableProcess;
 public class Client {
 	public Location location;
 	public static int clientKey = -1;
-	private static ClientProcessMap processes;
+	public static ClientProcessMap processes;
 	private static int processID = 0;
 	public static ConcurrentHashMap<String, String> processList;
 	
@@ -138,7 +138,10 @@ class ClientsideReceiver extends Thread{
 			            Runnable newObj = (Runnable)inobj.readObject();
 			            System.out.println("Object received. Starting at client ");
 			            //fff.suspend();
-			            new Thread(newObj).start();
+			            Thread t = new Thread(newObj);
+			            //t.getId();
+			            Client.processes.processList.put(t.getId(), t);
+			            t.start();
 	            }
 
 		} catch(IOException e){
@@ -207,12 +210,12 @@ class ClientProcessMap implements java.io.Serializable{
 	private static final long serialVersionUID = -6942022907249520529L;
 	
 	public int clientKey;
-	public ConcurrentHashMap<Integer, Runnable> processList;
+	public ConcurrentHashMap<Long, Runnable> processList;
 	
 	
 	public ClientProcessMap(int c){
 		clientKey = c;
-		processList = new ConcurrentHashMap<Integer, Runnable>();
+		processList = new ConcurrentHashMap<Long, Runnable>();
 	}
 	
 	
