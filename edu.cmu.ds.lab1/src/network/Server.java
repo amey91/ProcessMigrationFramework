@@ -178,7 +178,8 @@ public class Server {
 		int managerCount=0;
 		for(int i : Server.clients.keySet())
 			if(!Server.clients.get(i).processManager)
-				System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).lastSeen);
+				System.out.println("Client " +i+": "+ Server.clients.get(i)+" Location: ip="+clients.get(i).location.ipAddress+
+						" Connected to port="+clients.get(i).location.socketNumber+" listening on port="+clients.get(i).receiverPort+" Timestamp:"+clients.get(i).lastSeen);
 			else
 				managerCount++;
 		System.out.println("Total clients="+(Server.clients.size()-managerCount)+" and ProcessManagers="+managerCount);
@@ -510,7 +511,8 @@ class ProcessManager extends Thread{
 						break;
 					}
 					log(" Enter the name of the process to be launched (CaseSensitive) along with its arguments: ");
-					System.out.println("(Example: GrepProcess <queryString> <input.txt> <output.txt>)");
+					System.out.println("(Example: GrepProcess <queryString> <input.txt> <output.txt>)" +
+							"GrepProcess of C:\\input.txt C:\\javastuff\\output.txt");
 					
 					
 					processInform = br.readLine();
@@ -534,15 +536,18 @@ class ProcessManager extends Thread{
 						String ip= Server.clients.get(clientId).location.ipAddress;
 						System.out.println("contacting client on socket  "+ Server.clients.get(clientId).receiverPort);
 						System.out.println("contacting client on socket  "+ ip.substring(1, ip.length()));
+
 						//return inetaddress from string
 						
 						clientSocket = new Socket(InetAddress.getByName((String)ip.substring(1, ip.length())),Server.clients.get(clientId).clientsideReceiverPort);
+
 							break;
 					} catch(Exception e){
 						log("Failure to connect to client");	
 						e.printStackTrace();
 						
 					}
+					
 					//new Thread(instance).start(); //dont start the process at the server!
 					 ObjectOutputStream outObj = new ObjectOutputStream(clientSocket.getOutputStream());
 					 outObj.writeObject(instance);
