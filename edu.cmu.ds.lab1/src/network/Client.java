@@ -110,7 +110,7 @@ public class Client {
 	                System.out.println("echo: " + inFromServer.readLine());
 	            }
 	}
-	
+
 }
 
 

@@ -541,6 +541,7 @@ class ProcessManager extends Thread{
 						System.out.println("contacting client on socket  "+ Server.clients.get(clientId).receiverPort);
 						System.out.println("contacting client on socket  "+ ip.substring(1, ip.length()));
 
+
 						//return inetaddress from string
 						System.out.println((String)ip.substring(1, ip.length()));
 						clientSocket = new Socket(InetAddress.getByName((String)ip.substring(1, ip.length())),Server.clients.get(clientId).receiverPort);
@@ -550,10 +551,13 @@ class ProcessManager extends Thread{
 						e.printStackTrace();
 						
 					}
-					
+					//Server.clients.get(clientId).launch(processArgs);
 					//new Thread(instance).start(); //dont start the process at the server!
 					 ObjectOutputStream outObj = new ObjectOutputStream(clientSocket.getOutputStream());
 					 outObj.writeObject(instance);
+					 
+					 
+					 
 					 Thread.sleep(200);
 					 outObj = null;
 					 break;
