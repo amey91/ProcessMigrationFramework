@@ -43,19 +43,20 @@ public class GrepProcess implements MigratableProcess
 			while (!suspending) {
 				@SuppressWarnings("deprecation")
 				String line = in.readLine();
-				System.out.println(line+"+READ");
 				if (line == null) {
-				  
+				  //end of stream
 				  break;
 				}
 				
+				// if grep process is successful, write it to file 
 				if (line.contains(query)) {
 					out.println(line);
 					//System.out.println(line);
 					//System.out.println(i++);
 				}
 				
-				// Make grep take longer so that we don't require extremely large files for interesting results
+				// Make grep take longer so that we don't require extremely large files 
+				// for interesting results
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {

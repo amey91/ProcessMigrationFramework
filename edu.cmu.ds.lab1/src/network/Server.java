@@ -10,6 +10,8 @@ package network;
  */
 
 
+import grepprocess.GrepProcess;
+
 import java.lang.Runnable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +62,10 @@ public class Server {
 	public int getInitialPort(){
 		return INITIAL_PORT;
 	}
+	
+	public static int PROCESSES_SPAWNED = 0;
+	public ConcurrentHashMap<String, ProcessInfo> processes;
+	
 	
 	//default constructor for Server
 	public Server(String ip, int port){
@@ -518,16 +524,14 @@ class ProcessManager extends Thread{
 					processInform = br.readLine();
 					
 					// @referred http://stackoverflow.com/questions/10272773/split-string-on-the-first-white-space-occurence
-					processName = processInform.substring(0,processInform.indexOf(" ")); // "72"
-					processCmd = processInform.substring(processInform.indexOf(" ")+1); // "tocirah sneab"
-					String[] processArgs = processCmd.split(" ");
-					
 					// @referred http://stackoverflow.com/questions/3663944/what-is-the-best-way-to-remove-the-first-element-from-an-array
-					// if array has any arguments
+					processName = processInform.substring(0,processInform.indexOf(" ")); 
+					processCmd = processInform.substring(processInform.indexOf(" ")+1); 
+					String[] processArgs = processCmd.split(" ");
 
 					
 					//@referred to http://stackoverflow.com/questions/9886266/is-there-a-way-to-instantiate-a-class-by-name-in-java
-					Class<?> userClass = Class.forName("GrepProcess");
+					Class<?> userClass = Class.forName(processName);
 					Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 					MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)processArgs);
 					

@@ -26,8 +26,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.io.Serializable;
 
 import processmanager.MigratableProcess;
@@ -35,9 +37,9 @@ import processmanager.MigratableProcess;
 public class Client {
 	public Location location;
 	public static int clientKey = -1;
-	private static HashMap<Integer, ProcessInfo> processMap = new HashMap<Integer, ProcessInfo>();
+	private static ClientProcessMap processes;
 	private static int processID = 0;
-	public static ProcessHashMap processes;
+	public static ConcurrentHashMap<String, String> processList;
 	
 	public int getSocketNumber(){
 		return location.socketNumber;
@@ -53,7 +55,7 @@ public class Client {
 	        System.exit(0);
 	    }
 		//for storing all the rpocesses at this client 
-		processes = new ProcessHashMap();
+		
 				/* Try to connect to server */
 		        String hostName = Server.HOSTNAME;
 		        int portNumber = Server.INITIAL_PORT;
@@ -87,6 +89,8 @@ public class Client {
 	            	System.exit(-1);
 	            }
 	            System.out.println("Connection established. This client's ID is "+Integer.parseInt(clientKeyArray[1]));
+	            processes = new ClientProcessMap(Integer.parseInt(clientKeyArray[1]));
+	            
 	            try{
 	            // create a new client hearbeat thread for this client
 	            ClientHeartbeat chb = new ClientHeartbeat(Integer.parseInt(clientKeyArray[1]));
@@ -105,170 +109,10 @@ public class Client {
 	            	outToServer.println(userInput);
 	                System.out.println("echo: " + inFromServer.readLine());
 	            }
-	}//end fo main
+	}
 	
-	        /*
-	         *  Prepare to read message from server 
-	         * 
-			String str = null;
-			String[] args = null;
-			while ((str = inFromServer.readLine()) != null) {
-				args = str.split(" ");
-
-				if (args[0].equals("launch"))
-					launch(args);
-				//	 suspend a process given process ID 
-				else if (args[0].equalsIgnoreCase("suspend")) {
-
-					//check the process ID 
-					int migrateProcessID = -1;
-					try {
-						migrateProcessID = Integer.parseInt(args[1]);
-					} catch (NumberFormatException e) {
-						System.err.println("error in process ID format");
-						continue;
-					}
-
-					MigratableProcess mpWrite = processMap
-							.get(migrateProcessID).process;
-
-					if (mpWrite == null) {
-						System.err.println("wrong process ID");
-						continue;
-					}
-
-					mpWrite.suspend();
-					processMap.get(migrateProcessID).status = ProcessStatus.SUSPENDED;
-
-					//write the suspended process into a file 
-					FileOutputStream outputFile = new FileOutputStream(args[1]
-							+ args[2] + args[3] + ".obj");
-					ObjectOutputStream outputObj = new ObjectOutputStream(
-							outputFile);
-					outputObj.writeObject(mpWrite);
-					outputObj.flush();
-					outputObj.close();
-					outputFile.close();
-
-					// acknowledge back to master server 
-					outToServer.write("finish suspending\n");
-					outToServer.flush();
-
-					// remove the process from process list 
-					processMap.remove(migrateProcessID);
-				}
-                
-				
-				 /* resume a suspended process by reading from an *.obj file
-				 * previously dumped by another slave server
-				 */
-	            /*
-				else if (args[0].equals("resume")) {
-					//read the *.obj file 
-					FileInputStream inputFile = new FileInputStream(args[1]
-							+ args[2] + args[3] + ".obj");
-					ObjectInputStream inputObj = new ObjectInputStream(inputFile);
-					MigratableProcess mpRead = (MigratableProcess) inputObj.readObject();
-					inputObj.close();
-					inputFile.close();
-					
-					// run the process 
-					Thread newThread = new Thread(mpRead);
-					newThread.start();
-
-					// add this newly started process to the process list 
-					ProcessInfo processInfo = new ProcessInfo();
-					processInfo.process = mpRead;
-					processInfo.status = ProcessStatus.RUNNING;
-					processID++;
-					processMap.put(processID, processInfo);
-				}
-
-				// iterate through the process list and send back to server 
-	/*			else if (str.equals("processlist")) {
-					for (Map.Entry<Integer, ProcessInfo> entry : processMap
-							.entrySet()) {
-						if (entry.getValue().process.finalize())
-							outToServer.write("#"
-									+ entry.getKey()
-									+ "\t"
-									+ entry.getValue().process.getClass()
-											.getSimpleName() + " "
-									+ ProcessStatus.TERMINATED + "\n");
-						else
-							outToServer.write("#"
-									+ entry.getKey()
-									+ "\t"
-									+ entry.getValue().process.getClass()
-											.getSimpleName() + " "
-									+ entry.getValue().status + "\n");
-						outToServer.flush();
-					}
-
-					outToServer.write("process list finish\n");
-					outToServer.flush();
-				}
-
-
-			}
-		*/
-
-
-
-		/**
-		 * Instantiate a new process
-		 * 
-		 * @param args
-		 */
-		public static void launch(String[] args) {
-			MigratableProcess newProcess = null;
-			try {
-				Class<MigratableProcess> processClass = (Class<MigratableProcess>) Class.forName(args[1]);
-				Constructor<?> processConstructor = processClass
-						.getConstructor(String[].class);
-				Object[] processArgs = { Arrays.copyOfRange(args, 2, args.length) };
-				newProcess = (MigratableProcess) processConstructor
-						.newInstance(processArgs);
-			} catch (ClassNotFoundException e) {
-				System.out.println("Could not find class " + args[1]);
-				e.printStackTrace();
-				return;
-			} catch (SecurityException e) {
-				System.out.println("Security Exception getting constructor for "
-						+ args[1]);
-				return;
-			} catch (NoSuchMethodException e) {
-				System.out.println("Could not find proper constructor for "
-						+ args[1]);
-				return;
-			} catch (IllegalArgumentException e) {
-				System.out.println("Illegal arguments for " + args[1]);
-				return;
-			} catch (InstantiationException e) {
-				System.out.println("Instantiation Exception for " + args[1]);
-				return;
-			} catch (IllegalAccessException e) {
-				System.out.println("IIlegal access exception for " + args[1]);
-				return;
-			} catch (InvocationTargetException e) {
-				System.out.println("Invocation target exception for " + args[1]);
-				return;
-			} catch (Exception e) {
-				System.err.println(e.toString());
-			}
-
-			Thread newThread = new Thread(newProcess);
-			newThread.start();
-
-			/* add this newly started process to the process list */
-			ProcessInfo processInfo = new ProcessInfo();
-			//processInfo.process = newProcess; TODO
-			//processInfo.status = ProcessStatus.RUNNING;
-			processID++;
-			processMap.put(processID, processInfo);
-		}
-
 }
+
 
 class ClientsideReceiver extends Thread{
 	public DataInputStream inputStream=null;
@@ -355,3 +199,22 @@ class ClientHeartbeat extends Thread{
 	}
 }
 
+class ClientProcessMap implements java.io.Serializable{
+
+	/**
+	 * Autogenerated
+	 */
+	private static final long serialVersionUID = -6942022907249520529L;
+	
+	public int clientKey;
+	public ConcurrentHashMap<Integer, Runnable> processList;
+	
+	
+	public ClientProcessMap(int c){
+		clientKey = c;
+		processList = new ConcurrentHashMap<Integer, Runnable>();
+	}
+	
+	
+	
+}
