@@ -138,7 +138,9 @@ class ClientsideReceiver extends Thread{
 			            Runnable newObj = (Runnable)inobj.readObject();
 			            System.out.println("Object received. Starting at client ");
 			            //fff.suspend();
+			            
 			            Thread t = new Thread(newObj);
+			            System.out.println("Thread Id for thread is: "+ t.getId());
 			            //t.getId();
 			            Client.processes.processList.put(t.getId(), t);
 			            t.start();

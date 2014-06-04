@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class StaticCounter implements MigratableProcess{
+public class StaticCounter extends MigratableProcess{
 	private volatile boolean suspending;
 	Toolkit toolkit;
 	Timer timer;

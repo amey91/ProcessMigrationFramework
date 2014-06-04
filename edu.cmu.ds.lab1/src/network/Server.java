@@ -535,7 +535,6 @@ class ProcessManager extends Thread{
 					Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 					MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)processArgs);
 					
-
 					try{
 						String ip= Server.clients.get(clientId).location.ipAddress;
 						System.out.println("contacting client on socket  "+ Server.clients.get(clientId).receiverPort);

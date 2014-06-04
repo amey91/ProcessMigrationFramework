@@ -20,7 +20,7 @@ import org.eclipse.egit.github.core.service.UserService;
  * GitHubDataPlugin is a DataPlugin for GitHub. Users are GitHub users, and
  * Posts are repositories.
  */
-public class GitHubProcess implements MigratableProcess {
+public class GitHubProcess extends MigratableProcess {
     private final String NAME = "GitHub DataPlugin";
     final UserService service;
     public final static String gittoken = "45d262c43734f69d5c6f8005f3d0500b130bd2e4"; 

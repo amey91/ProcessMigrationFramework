@@ -4,21 +4,20 @@ import java.lang.Thread;
 import java.io.Serializable;
 
 
-public interface MigratableProcess extends Runnable, Serializable{
-	public final String DEFAULT_PROCESS_NAME = "Process name not assigned"; 
-	public String processName = DEFAULT_PROCESS_NAME;
-	
+public abstract class MigratableProcess implements Runnable, Serializable{
+
 	//must be called before object is serialized
 	// so that it can enter known safe state
-	public void suspend(); 
+	public abstract void suspend(); 
 	
-	public void migrate();
+	public abstract void migrate();
 	
-	public void remove();
+	public abstract void remove();
+	
 	
 	// this should at least return class name and 
 	// a set of params with which the method was called 
-	public String toString(String paramArray[]);
+	public abstract String toString(String paramArray[]);
 	
 
 }

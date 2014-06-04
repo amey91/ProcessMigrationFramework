@@ -13,7 +13,7 @@ import processmanager.MigratableProcess;
 import transactionalio.TransactionalFileInputStream;
 import transactionalio.TransactionalFileOutputStream;
 
-public class GrepProcess implements MigratableProcess
+public class GrepProcess extends MigratableProcess
 {
 	private TransactionalFileInputStream  inFile;
 	private TransactionalFileOutputStream outFile;
