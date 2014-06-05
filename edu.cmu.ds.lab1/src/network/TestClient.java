@@ -35,7 +35,7 @@ public class TestClient {
 		*/
 		String[] arrv = {"decrypt","C:/javastuff/output.txt","C:/output/output.txt"};
 		// @referred to http://stackoverflow.com/questions/2126714/java-get-all-variable-names-in-a-class
-		Class<?> userClass = Class.forName("processmanager.EncryptProcess");
+		Class<?> userClass = Class.forName("processmanager.StaticCounter");
 		Constructor<?> constructorNew = userClass.getConstructor(String[].class);
 		MigratableProcess instance = (MigratableProcess)constructorNew.newInstance((Object)arrv);
 		Thread pp = new Thread(instance);
@@ -47,7 +47,7 @@ public class TestClient {
         Socket echoSocket = new Socket(hostName, portNumber);
 
         ObjectOutputStream outObj = new ObjectOutputStream(echoSocket.getOutputStream());
-        Thread.sleep(1000); //comment this to launch and uncomment to migrate
+        //Thread.sleep(1000); //comment this to launch and uncomment to migrate
         instance.suspend(); //comment this to launch and uncomment to migrate
         //delete process from here once 
         pp=null;

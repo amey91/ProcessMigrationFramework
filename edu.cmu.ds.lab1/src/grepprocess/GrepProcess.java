@@ -57,7 +57,7 @@ public class GrepProcess extends MigratableProcess
 				
 				// Make grep take longer so that we don't require extremely large files for interesting results
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(100000);
 				} catch (InterruptedException e) {
 					// ignore it
 				}
