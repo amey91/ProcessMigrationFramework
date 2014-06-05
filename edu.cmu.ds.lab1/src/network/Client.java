@@ -61,14 +61,18 @@ public class Client {
 	
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, ClassNotFoundException{
+		String hostName ;
 		//check input
-		if (args.length != 1) {
-	        System.err.println("FAILURE. Usage: java Client <serverIp>");
-	        System.err.println("Exiting");
-	        System.exit(0);
+		if (args.length == 1) {
+	        System.err.println("Usage: java Client <serverIp>");
+	        System.err.println("Using defaults for local deployment on eclipse. Using host = "+ Server.HOSTNAME);
+	        hostName = args[0];
 	    }
+		else{
+			hostName=Server.HOSTNAME;
+		}
 		
-		String hostName = args[0];
+		
 		
 		
 		
