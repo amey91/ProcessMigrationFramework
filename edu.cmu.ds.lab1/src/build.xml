@@ -1,43 +1,87 @@
 <?xml version="1.0"?>
-<project name="hw5b" default="test" basedir=".">
-  <property name="build.dir" value="build" />
-  <property name="main.build.dir" value="${build.dir}/main" />
-  <property name="main.src.dir" value="src" />
-  <property name="test.src.dir" value="test" />
-  
-  <!-- Fully-qualified name of main class -->
-  <property name="main.class" value="edu.cmu.cs.cs214.hw5.framework.Main" />
-  
-  <path id="classpath.base"></path>
-  
-    <path id="hw5b.classpath">
-        <pathelement location="${build.dir}"/>
-        <pathelement location="libs/egit-core-3.3.0.jar"/>
-        <pathelement location="libs/opencloud.jar"/>
-        <pathelement location="libs/twitter4j-async-4.0.1.jar"/>
-        <pathelement location="libs/twitter4j-core-4.0.1.jar"/>
-        <pathelement location="libs/TopMap.jar"/>
-    </path>
-  
-  <target name="init">
-    <!-- Create the time stamp -->
-    <tstamp/>
-    <!-- Create the build directory structure used by compile -->
-    <mkdir dir="${build.dir}"/>
-  </target>
-  <target name="test" depends="compile" description="run the tests">
-    <!-- NO TESTS -->
-  </target>
-  <target name="compile" depends="init" description="compile the source">
-    <mkdir dir="${main.build.dir}"/>
-    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
-      <classpath refid="hw5b.classpath"/>
-    </javac>
-    <echo message="build done" />
-  </target>
-  <target name="run" depends="compile" description="run the code">
-    <java classname="${main.class}">
-        <classpath refid="hw5b.classpath"/>
-    </java>
-  </target>
-</project>
+<project name="hw4" default="test" basedir=".">
+  <!--target name="test"-->
+  	 <!--echo message="TODO: Complete this build.xml configuration!"/-->
+
+	<!-- The following section defines variables representing directory paths -->
+			  <property name="build.dir" value="build" />
+			  <property name="main.build.dir" value="${build.dir}/main" />
+			  <property name="main.src.dir" value="src" />
+			  <property name="test.build.dir" value="${build.dir}/tests" />
+			  <property name="test.src.dir" value="tests" />
+			  <property name="deploy.dir" value="deploy" />
+			 
+			  <!-- Defines the classpath (the external libraries needed) for the main program -->
+			  <path id="classpath.base">
+			    <!-- To add a dependency from the 'lib' directory, add the following: -->
+			    <!-- <pathelement location="lib/[FILE].jar]" /> -->
+			  </path>
+			 
+			  <!-- Defines the classpath for JUnit tests -->
+			  <path id="classpath.test">
+			    <pathelement location="lib/junit-4.11.jar" />
+			    <pathelement location="lib/hamcrest-core-1.3.jar" /> <!-- Required for JUnit -->
+			    <!-- The tests rely on the compiled files of the main program -->
+			    <pathelement location="${main.build.dir}"/>
+			    <!-- The tests also rely on the dependencies of the main program -->
+			    <path refid="classpath.base" />
+			  </path>
+			 
+			  <target name="init">
+			    <!-- Create the time stamp -->
+			    <tstamp/>
+			    <!-- Create the build directory structure used by compile -->
+			    <mkdir dir="${build.dir}"/>
+			  </target>
+			 
+			  <!-- Compiles the program -->
+			  <!-- To run this: use "ant compile" -->
+			  <target name="compile" depends="init" description="compile the source">
+			    <mkdir dir="${main.build.dir}"/>
+			    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+			      <classpath refid="classpath.base"/> <!-- This is where the classpath defined above is referenced -->
+			    </javac>
+			    <echo message="build done" />
+			  </target>
+			 
+			  <!-- Compiles the testing code -->
+			  <target name="compile-test" depends="compile" description="compile the tests">
+			    <mkdir dir="${test.build.dir}"/>
+			    <javac srcdir="${test.src.dir}" destdir="${test.build.dir}" includeantruntime="false">
+			      <classpath refid="classpath.test"/> <!-- This is where the classpath defined above is referenced -->
+			    </javac>
+			  </target>
+			 
+			  <!-- Build and test all files  -->
+			  <!-- To run this: use "ant" (default) or "ant test" -->
+			  <target name="test" depends="compile-test" description="run the tests">
+			    <junit printsummary="off" haltonfailure="yes">
+			        <classpath>
+			          <path refid="classpath.test" />
+			          <pathelement location="${test.build.dir}"/>
+			        </classpath>
+			       <!-- Defines how the test output looks -->
+			        <formatter type="plain" usefile="false" />
+			        <batchtest>
+			          <!-- Test all '.java' files in the 'test' source folder -->
+			          <fileset dir="${test.src.dir}" includes="**/*.java" />
+			        </batchtest>
+			    </junit>
+			  </target>
+			 
+			  <!-- Packages the main program into a jar file for external use. -->
+			  <target name="dist" depends="compile" description="generate the distribution" >
+			    <!-- Create the distribution directory -->
+			    <mkdir dir="${deploy.dir}"/>
+			    <!-- Put everything in ${build} into the ${ant.project.name}-${DSTAMP}.jar file -->
+			    <jar jarfile="${deploy.dir}/${ant.project.name}-${DSTAMP}.jar" basedir="${main.build.dir}"/>
+			  </target>
+			 
+			  <!-- Delete all build files -->
+			  <!-- To run this: use "ant clean" -->
+			  <target name="clean">
+			    <delete dir="${build.dir}" />
+			    <delete dir="${deploy.dir}" />
+			    <echo message="clean done" />
+			  </target>
+			</project>
