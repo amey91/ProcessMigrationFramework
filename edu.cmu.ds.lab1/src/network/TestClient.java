@@ -33,7 +33,7 @@ public class TestClient {
 		Thread rp = new Thread(r);
 		rp.start();
 		*/
-		String[] arrv = {"decrypt","C:/javastuff/output.txt","C:/output/output.txt"};
+		String[] arrv = {"encrypt","C:input.txt","C:/output/output.txt"};
 		// @referred to http://stackoverflow.com/questions/2126714/java-get-all-variable-names-in-a-class
 		Class<?> userClass = Class.forName("processmanager.StaticCounter");
 		Constructor<?> constructorNew = userClass.getConstructor(String[].class);

@@ -14,12 +14,10 @@ public class StaticCounter extends MigratableProcess{
 	int counter = 0;
 	
 	
-	public StaticCounter(String args[]) throws Exception
-	{
-		if (args.length != 3) {
-			System.out.println("from grep: arr len ="+args.length);
-			System.out.println("usage: GrepProcess <queryString> <inputFile> <outputFile>");
-			throw new Exception("Invalid Arguments");
+	public StaticCounter(String args[]) throws Exception{
+	if (args.length != 1) {
+		System.out.println("usage: processmanager.StaticCounter");
+		throw new Exception("Invalid Arguments");
 		}
 	}
 	
