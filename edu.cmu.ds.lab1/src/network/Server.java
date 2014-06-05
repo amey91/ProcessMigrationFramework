@@ -78,19 +78,25 @@ public class Server {
 	
 	public static void main(String args[]) throws IOException{
 		int portNumber = Server.INITIAL_PORT;  
-		if (args.length != 1) {
-			System.err.println("Usage: java Server OR java Server <port>");
-	        System.err.println("No port specified. Using default port 2222");
+		
+		
+		if (args.length >1) {
+			System.err.println("Usage: java Server OR java Server <port>  (example java Server 2222)");
+	        System.exit(0);
 	        }
-		else
-			
-			portNumber = Integer.parseInt(args[1]);
+		
+		if(args.length ==1){
+			portNumber = Integer.parseInt(args[0]);
+			Server.INITIAL_PORT = portNumber;
+		}
+		
 			
 		clients = new ConcurrentHashMap<Integer, ClientInfo>();
 		processes = new ConcurrentHashMap<String, ProcessInfo>();
 		// setup the hearbeat socket for the server that listens to clients 
 		ServerSocket serverSocket1 = new ServerSocket(Server.HEARTBEAT_PORT);
 		new Thread(new ReceiveHearBeats(serverSocket1)).start();
+		System.out.println("Server ip = "+serverSocket1.getInetAddress());
 		
 	    
 		// setup the time out thread which looks intot he hashmap for timedout clients
@@ -335,10 +341,17 @@ class HandleHeartBeat extends Thread {
 	    
         // implement client handler after updating client info
 	    if(!Server.clients.containsKey(clientKey)){
-	    	System.out.println("Client with key "+clientKey+" does not exist or has timed-out.");
-	    	System.exit(0);
+	    	System.out.println("Client with key "+clientKey+" does not exist or has timed-out for more than 20 seconds. No action taken for this heartbeat.");
+	    	
 	    }
 	    else{
+	    	//for this client, delete all entries in the server's process list
+	    	for(String s : Server.processes.keySet()){
+	    		if(Server.processes.get(s).clientId==clientKey)
+	    			Server.processes.remove(s);
+	    	}
+	    	
+	    	
 	    	//update the lastseen of this client
 	    	java.util.Date currentDate1 = new java.util.Date();
 	    	Server.clients.get(clientKey).lastSeen = currentDate1.getTime();
@@ -482,8 +495,16 @@ class ProcessManager extends Thread{
 			
 			try{
 				
-				log("Press: 1.List Clients 2. List Processes 3.Remove Process 4.Migrate Process: 5.Launch Process");
-				choice = Integer.parseInt((br.readLine()));
+				
+				
+				String inp = "";
+				while(inp.length()==0 || inp == null){
+					log("Press: 1.List Clients 2. List Processes 3.Remove Process 4.Migrate Process: 5.Launch Process");
+					inp = br.readLine();
+				}
+				
+				
+				choice = Integer.parseInt(inp);
 				switch(choice){
 				case(1): // display clients
 					System.out.println("Display Clients called by Process Manager:");
@@ -606,8 +627,11 @@ class ProcessManager extends Thread{
 					 outObj.writeObject(instance);
 					 Thread.sleep(200);
 					 outObj = null;
+					 Server.processes.put("Process"+(Server.PROCESSES_SPAWNED-1), new ProcessInfo(clientId));
+					 
 					 break;
 					
+					 
 				default: 
 					log(" Unexpected Input.");
 					break;
@@ -615,7 +639,8 @@ class ProcessManager extends Thread{
 				}//end of switch
 					
 				
-			}catch(Exception e){
+			}
+			catch(Exception e){
 				log("something went wrong. Restarting ProcessManager. Refer error message below:");
 				e.printStackTrace();
 				//if process manager exits, start new process manager

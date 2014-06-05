@@ -34,6 +34,7 @@ public class StaticCounter extends MigratableProcess{
 				e.printStackTrace();
 			}
 			    counter++;
+			    
 		}
 		suspending = false;
 	}

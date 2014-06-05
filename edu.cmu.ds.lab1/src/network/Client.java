@@ -40,8 +40,10 @@ public class Client {
 	public static int clientKey = -1;
 	//public static ClientProcessMap processes;
 	private static int processID = 0;
+	//keep map of process to migratable process to migrate
 	public static ConcurrentHashMap<String, MigratableProcess> processes;
-	
+	//keep map of process to thread to check is alive()
+	public static ConcurrentHashMap<String, Thread> processToThreads; 
 	public int getSocketNumber(){
 		return location.socketNumber;
 	}
@@ -60,16 +62,22 @@ public class Client {
 	
 	public static void main(String args[]) throws UnknownHostException, IOException, ClassNotFoundException{
 		//check input
-		if (args.length != 0) {
-	        System.err.println("FAILURE. Usage: java Client");
+		if (args.length != 1) {
+	        System.err.println("FAILURE. Usage: java Client <serverIp>");
 	        System.err.println("Exiting");
 	        System.exit(0);
 	    }
+		
+		String hostName = args[0];
+		
+		
+		
 		//for storing all the rpocesses at this client 
 		
 				/* Try to connect to server */
-		        String hostName = Server.HOSTNAME;
+		        
 		        int portNumber = Server.INITIAL_PORT;
+		        processToThreads = new ConcurrentHashMap<String, Thread>();
 		        
 		        //create a new receiver port for a client to receive messages from other clients
 		        ServerSocket receiverSocket = new ServerSocket(0);
@@ -155,6 +163,7 @@ class ClientsideReceiver extends Thread{
 				            System.out.println("Thread Id for thread is: "+ t.getId());
 				            //t.getId();
 				            Client.processes.put(newObj1.getName(), newObj1);
+				            Client.processToThreads.put(newObj1.getName(),t);
 				            t.start();
 				            Client.displayProcesses();
 			            } else 
@@ -250,6 +259,17 @@ class ClientHeartbeat extends Thread{
 		//Socket heartbeatSocket;
 		//PrintWriter outToServer;
 		while(true){
+			
+			for(String s: Client.processes.keySet()){
+				if(Client.processes.get(s)==null)
+					Client.processes.remove(s);
+				if(!Client.processToThreads.containsKey(s))
+					Client.processes.remove(s);
+				if(!Client.processToThreads.get(s).isAlive())
+					Client.processes.remove(s);
+			}
+			
+			
 			try{
 				//open up a socket for heartbeat to the server
 				Socket heartbeatSocket = new Socket(Server.HOSTNAME, Server.HEARTBEAT_PORT);
@@ -274,7 +294,7 @@ class ClientHeartbeat extends Thread{
 				System.out.println("Process Manager could not contact client. Retrying.");
 				continue;
 			}
-		}
+		}//end of infinite while
 
 	}
 }
