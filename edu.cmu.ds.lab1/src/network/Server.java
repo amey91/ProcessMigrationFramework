@@ -590,9 +590,11 @@ class ProcessManager extends Thread{
 						break;
 					}
 					log(" Enter the name of the process to be launched (CaseSensitive) along with its arguments: ");
-					System.out.println("(Example: GrepProcess <queryString> <input.txt> <output.txt>)" +
-							"GrepProcess of C:\\input.txt C:\\javastuff\\output.txt");
-					
+					System.out.println("Examples: (GrepProcess <queryString> <input.txt> <output.txt>)" );
+					System.out.println("(processmanager.StaticCounter )");
+					System.out.println("(processmanager.EncryptProcess encrypt C:/input.txt C:/output/output.txt)");
+					System.out.println("(processmanager.GitHubProcess <username> <output.txt>)");
+					System.out.println("For Convenience, you can copy&paste the content in the parenthesis, pay attention to the spaces");
 					
 					processInform = br.readLine();
 					

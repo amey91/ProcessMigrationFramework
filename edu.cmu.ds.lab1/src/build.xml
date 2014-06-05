@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project name="hw5b" default="test" basedir=".">
+  <property name="build.dir" value="build" />
+  <property name="main.build.dir" value="${build.dir}/main" />
+  <property name="main.src.dir" value="src" />
+  <property name="test.src.dir" value="test" />
+  
+  <!-- Fully-qualified name of main class -->
+  <property name="main.class" value="edu.cmu.cs.cs214.hw5.framework.Main" />
+  
+  <path id="classpath.base"></path>
+  
+    <path id="hw5b.classpath">
+        <pathelement location="${build.dir}"/>
+        <pathelement location="libs/egit-core-3.3.0.jar"/>
+        <pathelement location="libs/opencloud.jar"/>
+        <pathelement location="libs/twitter4j-async-4.0.1.jar"/>
+        <pathelement location="libs/twitter4j-core-4.0.1.jar"/>
+        <pathelement location="libs/TopMap.jar"/>
+    </path>
+  
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build.dir}"/>
+  </target>
+  <target name="test" depends="compile" description="run the tests">
+    <!-- NO TESTS -->
+  </target>
+  <target name="compile" depends="init" description="compile the source">
+    <mkdir dir="${main.build.dir}"/>
+    <javac srcdir="${main.src.dir}" destdir="${main.build.dir}" includeantruntime="false">
+      <classpath refid="hw5b.classpath"/>
+    </javac>
+    <echo message="build done" />
+  </target>
+  <target name="run" depends="compile" description="run the code">
+    <java classname="${main.class}">
+        <classpath refid="hw5b.classpath"/>
+    </java>
+  </target>
+</project>
